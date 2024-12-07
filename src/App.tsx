@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TinderCard from "react-tinder-card";
-import "./App.css"; // CSS 파일 추가
+import "./App.css";
 
 function App() {
   const [people, setPeople] = useState([

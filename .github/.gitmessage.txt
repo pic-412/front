@@ -2,15 +2,15 @@
 
 # --- 커밋 끝 ---
 #   <타입> 목록
-#   ✨	:sparkles:   	새 기능 및 코드 추가 
-#   💄	:lipstick: 		UI/스타일 파일 추가/수정 
-#   🔥 	:fire:    		기능 및 코드, 파일 삭제/제거 
-#   🐛  :bug:         버그 수정 
-#   ♻️  :recycle:     코드 리팩토링 
-#   📝  :memo:        문서작성 및 편집 
-#   ✅  :white_check_mark:  테스트 추가/수정 
-#   🩹  :adhesive_bandage:  단순한, critical하지 않은 이슈 수정 
-#   ✏️  :pencil2:           단순 오타 수정 
+#   ✨	:sparkles:             	 새 기능 및 코드 추가 
+#   💄	:lipstick: 	          	 UI/스타일 파일 추가/수정 
+#   🔥 	:fire:    	        	   기능 및 코드, 파일 삭제/제거 
+#   🐛  :bug:                   버그 수정 
+#   ♻️  :recycle:               코드 리팩토링 
+#   📝  :memo:                  문서작성 및 편집 
+#   ✅  :white_check_mark:      테스트 추가/수정 
+#   🩹  :adhesive_bandage:      단순한, critical하지 않은 이슈 수정 
+#   ✏️  :pencil2:               단순 오타 수정 
 #   👷  :construction_worker:   셋팅, CI 빌드 시스템 추가/수정 
 # ------------------
 #   git config --local commit.template ./.github/.gitmessage.txt

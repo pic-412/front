@@ -5,21 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint src",
-    "lint:fix": "eslint \"./src/**/*.{ts,tsx}\" --fix",
-    "preview": "vite preview",
-    "prepare": "husky install",
-    "format": "prettier --write ."
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,md,yml,yaml,html,css}": [
-      "prettier --write"
-    ]
+    "build": "tsc -b && vite build"
   },
   "dependencies": {
     "@react-spring/web": "^9.7.5",

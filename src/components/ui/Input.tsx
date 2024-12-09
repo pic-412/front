@@ -12,6 +12,8 @@ const sharedStyles = `
   transition: border-color 0.3s ease;
   background-color: #f7f5ef;
   color: #333;
+  width: 80vw;
+  max-width: 400px;
 `;
 
 const Input = styled.input`

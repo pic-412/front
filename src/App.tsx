@@ -1,4 +1,5 @@
 import { createBrowserRouter, Outlet, RouterProvider, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { PATH } from '@/constants/path';
 
@@ -18,6 +19,19 @@ const PrivateRoute = () => {
   return <Outlet key={pathname} />;
 };
 
+const AppLayout = ({ includeHeaderNav = true }) => (
+  <div className="app-wrapper">
+    <Header />
+    <main>
+      <Outlet />
+    </main>
+    {includeHeaderNav && <Navbar />}
+  </div>
+);
+AppLayout.propTypes = {
+  includeHeaderNav: PropTypes.bool,
+};
+
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -25,15 +39,7 @@ const App = () => {
       element: <PrivateRoute />,
       children: [
         {
-          element: (
-            <div className="app-wrapper">
-              <Header />
-              <main>
-                <Outlet />
-              </main>
-              <Navbar />
-            </div>
-          ),
+          element: <AppLayout />,
           children: [
             { index: true, element: <MainPage /> },
             { path: PATH.MYPIC, element: <MyPicPage /> },
@@ -47,8 +53,13 @@ const App = () => {
             { path: PATH.LOCATION, element: <LocationPage /> },
           ],
         },
-        { path: PATH.SIGNIN, element: <SignIn /> },
-        { path: PATH.SIGNUP, element: <SignUp /> },
+        {
+          element: <AppLayout includeHeaderNav={false} />,
+          children: [
+            { path: PATH.SIGNIN, element: <SignIn /> },
+            { path: PATH.SIGNUP, element: <SignUp /> },
+          ],
+        },
       ],
     },
   ]);

@@ -1,71 +1,103 @@
+import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
+import theme from '@/styles/theme';
 import Separator from '@/components/ui/Separator';
-import Checkbox from '@/components/ui/Checkbox';
-import LocationCard from '@/components/ui/LocationCard';
 
 const ProfilePage = () => {
+  const [userInfo, setUserInfo] = useState({
+    email: 'abc123@naver.com',
+    nickname: 'abc123',
+  });
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      console.log('fetchUserInfo');
+      setUserInfo(data);
+    };
+    fetchUserInfo();
+  }, []);
+
+  const handleLogout = async () => {
+    await logoutUser();
+  };
+
   return (
-    <Container>
-      <ButtonWrapper>
-        <Button size="sm">저장</Button>
-        <Button size="sm" variant="white">
-          더보기
-        </Button>
-      </ButtonWrapper>
-      <Separator size="sm" />
-      <Button size="md">로그아웃</Button>
-      <Separator size="sm" />
-      <Button size="lg">회원가입</Button>
-      <Separator size="md" />
-      <StyledInput placeholder="이메일 주소" />
-      <Separator size="sm" />
-      <StyledInput placeholder="비밀번호" />
-      <Separator size="sm" />
-      <StyledInput placeholder="비밀번호 확인" />
-      <Separator size="sm" />
-      <CheckboxContainer>
-        <Checkbox
-          label="(필수) 개인정보 수집 및 이용 동의"
-          checked={false}
-          onChange={(checked) => console.log(checked)}
-        />
-      </CheckboxContainer>
-      <Separator size="sm" />
-      <LocationCard
-        name="스타벅스 강남점"
-        address="서울시 강남구 테헤란로 1234"
-        operatingHours="매일 07:00 - 22:00"
-      />
-      <Separator size="sm" />
-      <LocationCard name="한신포차" />
-    </Container>
+    <>
+      <ProfileWrapper>
+        <UserInfoSection>
+          <UserInfoWrapper>
+            <UserInfoLabel>내 계정</UserInfoLabel>
+            <UserInfoValue>{userInfo.email}</UserInfoValue>
+          </UserInfoWrapper>
+          <Separator size="sm" />
+          <UserInfoWrapper>
+            <UserInfoLabel>내 정보</UserInfoLabel>
+            <UserEditWrapper>
+              <UserInfoValue>{userInfo.nickname}</UserInfoValue>
+              <EditButton variant="white">수정하기</EditButton>
+            </UserEditWrapper>
+          </UserInfoWrapper>
+          <Separator size="sm" />
+          <UserInfoWrapper>
+            <UserInfoLabel>MY PIC</UserInfoLabel>
+            <UserInfoValue>보러가기</UserInfoValue>
+          </UserInfoWrapper>
+        </UserInfoSection>
+      </ProfileWrapper>
+      <LogoutButton variant="default" size="lg" onClick={handleLogout}>
+        로그아웃
+      </LogoutButton>
+    </>
   );
 };
 
-const Container = styled.div`
+const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  height: 70vh;
+  padding: 20px;
 `;
 
-const StyledInput = styled(Input)`
+const UserInfoSection = styled.div`
+  flex-grow: 1;
+`;
+
+const UserInfoWrapper = styled.div`
   width: 100%;
-  max-width: 450px;
+  margin-bottom: 16px;
+  text-align: left;
 `;
 
-const CheckboxContainer = styled.div`
+const UserEditWrapper = styled.div`
   width: 100%;
-  max-width: 450px;
-`;
-
-const ButtonWrapper = styled.div`
+  margin-bottom: 16px;
+  text-align: left;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
-  gap: 10px; // Adds space between buttons
+  justify-content: space-between;
+`;
+
+const EditButton = styled(Button)`
+  font-size: 12px;
+  width: 90px;
+  height: 25px;
+  border: 1px solid ${theme.colors.darkGray};
+  border-radius: 14px;
+`;
+
+const UserInfoLabel = styled.label`
+  display: block;
+  color: ${theme.colors.darkGray};
+  margin-bottom: 10px;
+`;
+
+const UserInfoValue = styled.div`
+  color: ${theme.colors.darkGray};
+`;
+
+const LogoutButton = styled(Button)`
   width: 100%;
 `;
 export default ProfilePage;

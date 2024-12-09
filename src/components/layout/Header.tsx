@@ -19,6 +19,7 @@ const Header = () => {
   let headerContent;
   const currentPathKey = Object.keys(PATH).find(
     (key) => PATH[key as keyof typeof PATH] === currentPath
+
   );
 
   if (

@@ -1,53 +1,65 @@
-import { useState } from 'react';
-import TinderCard from 'react-tinder-card';
-import './App.css';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+  useLocation,
+} from 'react-router-dom';
+import { PATH } from '@/constants/path';
+import RootLayout from '@/layouts/Root';
+import MainPage from '@/pages/MainPage';
+import SignIn from '@/pages/SignIn';
+import SignUp from '@/pages/SignUp';
+import MyPicPage from '@/pages/MyPicPage';
+import ProfilePage from '@/pages/ProfilePage';
+import ProfileEditPage from '@/pages/ProfileEditPage';
+import LocationPage from '@/pages/LocationPage';
+import Header from './components/layout/Header';
+import Navbar from './components/layout/Nav';
 
-function App() {
-  const [people, setPeople] = useState([
+const PrivateRoute = () => {
+  const { pathname, search } = useLocation();
+
+  return <Outlet />;
+};
+
+const App = () => {
+  const router = createBrowserRouter([
     {
-      name: '1',
-      url: 'https://blog-static.kkday.com/ko/blog/wp-content/uploads/malaysia_kota_kinabalu_pulau_tiga.jpg',
-    },
-    {
-      name: '2',
-      url: 'https://cdn.informaticsview.com/news/photo/202408/485_1741_4410.jpg',
-    },
-    {
-      name: '3',
-      url: 'https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1jPF/image/oa_fqRsHcmBRlEPCIjSKOHDW_gs.jpg',
+      path: PATH.MAIN,
+      element: <PrivateRoute />,
+      children: [
+        {
+          element: (
+            <div className="app-wrapper">
+              <Header />
+              <main>
+                <Outlet />
+              </main>
+              <Navbar />
+            </div>
+          ),
+          children: [
+            { index: true, element: <MainPage /> },
+            { path: PATH.MYPIC, element: <MyPicPage /> },
+            {
+              path: PATH.PROFILE,
+              children: [
+                { index: true, element: <ProfilePage /> },
+                { path: PATH.PROFILE_EDIT, element: <ProfileEditPage /> },
+              ],
+            },
+            { path: PATH.LOCATION, element: <LocationPage /> },
+          ],
+        },
+        { path: PATH.SIGNIN, element: <SignIn /> },
+        { path: PATH.SIGNUP, element: <SignUp /> },
+      ],
     },
   ]);
 
-  const onSwipe = (direction: string, nameToDelete: string) => {
-    console.log('방향: ' + direction + ', 삭제된 사용자: ' + nameToDelete);
-    // 실제로 카드를 제거하는 로직 추가
-    setPeople((prevPeople) => prevPeople.filter((person) => person.name !== nameToDelete));
-  };
-
-  return (
-    <div className="app">
-      <div className="card-container">
-        {people.map((person) => (
-          <TinderCard
-            key={person.name}
-            className="swipe"
-            onSwipe={(dir) => onSwipe(dir, person.name)}
-          >
-            <div
-              className="card"
-              style={{
-                backgroundImage: `url(${person.url})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-            >
-              <h3>{person.name}</h3>
-            </div>
-          </TinderCard>
-        ))}
-      </div>
-    </div>
-  );
-}
+  return <RouterProvider router={router} />;
+};
 
 export default App;

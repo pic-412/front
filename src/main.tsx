@@ -1,9 +1,17 @@
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import { ThemeProvider } from '@emotion/react';
+import ReactDOM from 'react-dom/client';
+import GlobalStyle from '@/styles/GlobalStyle';
+import theme from '@/styles/theme';
+import App from '@/App.tsx';
+import SplashScreen from './pages/SplashScreen';
 
-createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <SplashScreen />
+      <App />
+    </ThemeProvider>
   </StrictMode>
 );

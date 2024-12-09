@@ -156,7 +156,7 @@ const baseStyles = css`
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
-    background-color: ${theme.colors.lightGray};
+    background-color: ${theme.colors.white};
     display: flex;
     flex-direction: column;
     min-height: 100vh;

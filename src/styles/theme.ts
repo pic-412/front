@@ -1,7 +1,7 @@
 const colors = {
   primary: '#8FD797',
   hoverPrimary: '#FDF6AC',
-  supportGray: '#F7F5F5',
+  gray: '#F7F5F5',
   black: '#1B232A',
   white: '#FFFFFF',
   darkGray: '#8E8e93',

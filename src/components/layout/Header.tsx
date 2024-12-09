@@ -1,15 +1,15 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import logo from '@/assets/images/logo.svg';
 
 const Header = () => {
   return (
-    <header css={headerStyle}>
+    <StyledHeader>
       <img src={logo} width={60} alt="로고" />
-    </header>
+    </StyledHeader>
   );
 };
 
-const headerStyle = css`
+const StyledHeader = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;

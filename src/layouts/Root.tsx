@@ -1,27 +1,27 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { Outlet } from 'react-router-dom';
 import Navbar from '@/components/layout/Nav';
 import Header from '@/components/layout/Header';
 import theme from '@/styles/theme';
 
 const RootLayout = () => (
-  <div css={wrapperStyle}>
+  <Wrapper>
     <Header />
-    <main css={contentStyle}>
+    <Content>
       <Outlet />
-    </main>
+    </Content>
     <Navbar />
-  </div>
+  </Wrapper>
 );
 
-const wrapperStyle = css`
+const Wrapper = styled.div`
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
   background-color: ${theme.colors.darkGray};
 `;
 
-const contentStyle = css`
+const Content = styled.main`
   flex-grow: 1;
   display: flex;
   flex-direction: column;

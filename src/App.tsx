@@ -1,13 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  createBrowserRouter,
-  Navigate,
-  Outlet,
-  RouterProvider,
-  useLocation,
-} from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { PATH } from '@/constants/path';
-import RootLayout from '@/layouts/Root';
+
 import MainPage from '@/pages/MainPage';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
@@ -19,7 +12,7 @@ import Header from './components/layout/Header';
 import Navbar from './components/layout/Nav';
 
 const PrivateRoute = () => {
-  const { pathname, search } = useLocation();
+  // const { pathname, search } = useLocation();
 
   return <Outlet />;
 };

@@ -1,4 +1,4 @@
-const ProgileEditPage = () => {
+const ProfileEditPage = () => {
   return (
     <div>
       <h1>Profile Edit</h1>
@@ -6,4 +6,4 @@ const ProgileEditPage = () => {
   );
 };
 
-export default ProgileEditPage;
+export default ProfileEditPage;

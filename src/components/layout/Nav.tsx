@@ -35,12 +35,15 @@ const Navbar = () => {
 
 const NavContainer = styled.div`
   display: flex;
+  border-top: 1px solid ${theme.colors.lightGray};
+  padding-top: 1px;
+  border-radius: 8px 8px 0 0;
   justify-content: space-around;
   align-items: center;
   width: 100%;
   padding: 16px 0;
   font-size: ${theme.fontSizes.normal};
-  background-color: ${theme.colors.bg};
+  background-color: ${theme.colors.white};
 `;
 const NavItem = styled(NavLink)`
   display: flex;

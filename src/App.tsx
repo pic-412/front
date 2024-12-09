@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider, useLocation } from 'react-router-dom';
 import { PATH } from '@/constants/path';
 
 import MainPage from '@/pages/MainPage';
@@ -12,9 +12,9 @@ import Header from './components/layout/Header';
 import Navbar from './components/layout/Nav';
 
 const PrivateRoute = () => {
-  // const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
 
-  return <Outlet />;
+  return <Outlet key={pathname} />;
 };
 
 const App = () => {

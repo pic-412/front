@@ -1,5 +1,5 @@
 export const PATH = {
-  HOME: '/',
+  MAIN: '/',
   MYPIC: '/mypic',
   PROFILE: '/profile',
   PROFILE_EDIT: 'edit',
@@ -9,7 +9,7 @@ export const PATH = {
 };
 
 export const PATH_TITLE = {
-  HOME: '홈',
+  MAIN: '메인',
   MYPIC: '마이픽',
   PROFILE: '프로필',
   PROFILE_EDIT: '프로필 변경',

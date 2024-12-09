@@ -197,7 +197,7 @@ const baseStyles = css`
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    animation: fadeOut 5s ease-in-out forwards;
+    animation: fadeOut 1s ease-in-out forwards;
     @keyframes fadeOut {
       0% {
         opacity: 1;

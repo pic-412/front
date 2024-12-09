@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   createBrowserRouter,
   Navigate,
@@ -7,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { PATH } from '@/constants/path';
 import RootLayout from '@/layouts/Root';
-import HomePage from '@/pages/HomePage';
+import MainPage from '@/pages/MainPage';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
 import MyPicPage from '@/pages/MyPicPage';
@@ -26,7 +27,7 @@ const PrivateRoute = () => {
 const App = () => {
   const router = createBrowserRouter([
     {
-      path: PATH.HOME,
+      path: PATH.MAIN,
       element: <PrivateRoute />,
       children: [
         {
@@ -40,7 +41,7 @@ const App = () => {
             </div>
           ),
           children: [
-            { index: true, element: <HomePage /> },
+            { index: true, element: <MainPage /> },
             { path: PATH.MYPIC, element: <MyPicPage /> },
             {
               path: PATH.PROFILE,

@@ -1,6 +1,5 @@
-/* eslint-disable react/no-unknown-property */
 import { NavLink } from 'react-router-dom';
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { PATH } from '@/constants/path';
 import theme from '@/styles/theme';
 import mainIcon from '@/assets/images/icons/main.svg';
@@ -18,28 +17,23 @@ const Navbar = () => {
   ];
 
   return (
-    <div css={NavContainer}>
+    <NavContainer>
       {menus.map(({ path, title, icon, activeIcon }) => (
-        <NavLink
-          css={NavItem}
-          to={path}
-          key={title}
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
+        <NavItem to={path} key={title} className={({ isActive }) => (isActive ? 'active' : '')}>
           {({ isActive }) => (
             <div>
-              <img src={isActive ? activeIcon : icon} alt={`${title}`} css={iconStyle} />
+              <IconStyle src={isActive ? activeIcon : icon} alt={`${title}`} />
               {''}
               <span>{title}</span>
             </div>
           )}
-        </NavLink>
+        </NavItem>
       ))}
-    </div>
+    </NavContainer>
   );
 };
 
-const NavContainer = css`
+const NavContainer = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -48,7 +42,7 @@ const NavContainer = css`
   font-size: ${theme.fontSizes.normal};
   background-color: ${theme.colors.bg};
 `;
-const NavItem = css`
+const NavItem = styled(NavLink)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,7 +62,7 @@ const NavItem = css`
   }
 `;
 
-const iconStyle = css`
+const IconStyle = styled.img`
   width: 24px;
   height: 24px;
   display: flex;
@@ -76,4 +70,5 @@ const iconStyle = css`
   justify-content: center;
   margin-bottom: 6px;
 `;
+
 export default Navbar;

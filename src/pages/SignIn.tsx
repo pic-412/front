@@ -6,11 +6,18 @@ import Separator from '@/components/ui/Separator';
 import logo from '@/assets/images/logo.svg';
 import { signIn } from '@/api/accountAPI';
 import { useNavigate } from 'react-router-dom';
+import PasswordInput from '@/components/ui/ShowPassword';
+import theme from '@/styles/theme';
+
 
 const SignInPage = () => {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
+
+const handleSignUp = () => {
+    navigate('/signup');
+  };
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -47,16 +54,20 @@ const SignInPage = () => {
         <Separator size="lg" />
         <Input placeholder="이메일주소" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Separator size="sm" />
-        <Input
-          placeholder="비밀번호"
-          type="password"
+        <PasswordInput 
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <Separator size="lg" />
         <Button size="md" onClick={handleSignIn}>
           로그인
-        </Button>
+        </Button><Separator size="sm" />
+  
+        <SignUp onClick={handleSignUp}>
+          <span>회원가입</span>
+        </SignUp>
+        
       </ContentWrapper>
     </Container>
   );
@@ -83,5 +94,10 @@ const Logo = styled.img`
   width: 100px;
   margin: 0 auto;
 `;
-
+        
+const SignUp = styled.div`
+  color: ${theme.colors.darkGray};
+  cursor: pointer;
+  margin-top: 20px;
+`;
 export default SignInPage;

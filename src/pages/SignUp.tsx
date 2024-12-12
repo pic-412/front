@@ -7,6 +7,7 @@ import Checkbox from '@/components/ui/Checkbox';
 import theme from '@/styles/theme';
 import { signUp } from '@/api/accountAPI';
 import { useState } from 'react';
+import PasswordInput from '@/components/ui/ShowPassword';
 
 const SignUpPage = () => {
   const navigate = useNavigate(); // useNavigate 훅 추가
@@ -67,7 +68,7 @@ const SignUpPage = () => {
         </Welcome>
         <Separator size="lg" />
         <InputWrapper>
-          <Input
+        <Input
             placeholder="이메일주소"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -75,21 +76,19 @@ const SignUpPage = () => {
         </InputWrapper>
         <Separator size="sm" />
         <InputWrapper>
-          <Input
-            placeholder="비밀번호"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <PasswordInput 
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        
         </InputWrapper>
         <Separator size="sm" />
         <InputWrapper>
-          <Input
-            placeholder="비밀번호확인"
-            type="password"
-            value={passwordCheck}
-            onChange={(e) => setPasswordCheck(e.target.value)}
-          />
+        <PasswordInput     placeholder="비밀번호확인"
+          value={passwordCheck}
+          onChange={(e) => setPasswordCheck(e.target.value)}
+        />
+        
         </InputWrapper>
         <Separator size="sm" />
         <CheckboxWrapper>
@@ -101,7 +100,7 @@ const SignUpPage = () => {
         </CheckboxWrapper>
         <Separator size="lg" />
         <Button size="md" onClick={handleSignUp}>
-          회원가입
+          가입하기
         </Button>
       </ContentWrapper>
     </Container>

@@ -4,22 +4,54 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Separator from '@/components/ui/Separator';
 import theme from '@/styles/theme';
-import { deleteAccount } from '@/api/accountAPI';
-import { Navigate } from 'react-router-dom';
+import { deleteAccount, updateProfile } from '@/api/accountAPI';
+import { useNavigate } from 'react-router-dom';
+import { ConfirmModal } from '@/components/ui/Modal';
+import PasswordInput from '@/components/ui/ShowPassword';
 
 const ProfileEditPage = () => {
-  const [userInfo, setUserInfo] = useState({});
+  const navigate = useNavigate();
+  const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [userInfo, setUserInfo] = useState<{ nickname: string; password: string; passwordCheck: string }>({
+    nickname: '',
+    password: '',
+    passwordCheck: '',
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo({
       ...userInfo,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async () => {
-    // Handle form submission and update user profile
-    console.log('Submitting user info:', userInfo);
+  const handleSubmit = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmSave = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const { nickname, password, passwordCheck } = userInfo;
+      
+      // 닉네임은 필수, 비밀번호는 선택적으로 전달
+      await updateProfile(
+        token,
+        nickname,
+        password || undefined,
+        passwordCheck || undefined
+      );
+
+      setIsModalOpen(false);
+      navigate('/profile');
+    } catch (error) {
+      console.error('프로필 업데이트 실패:', error);
+      alert(error instanceof Error ? error.message : '프로필 업데이트에 실패했습니다.');
+    }
   };
 
   const handleDeleteAccount = async () => {
@@ -30,7 +62,7 @@ const ProfileEditPage = () => {
       if (window.confirm('정말 탈퇴하시겠습니까?')) {
         await deleteAccount(token);
         localStorage.removeItem('token');
-        Navigate('/signin');
+        navigate('/');
       }
     } catch (error) {
       console.error('회원탈퇴 실패:', error);
@@ -48,16 +80,18 @@ const ProfileEditPage = () => {
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호</UserInfoLabel>
-            <Input name="password" value={userInfo.password} onChange={handleInputChange} />
+            <PasswordInput 
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
           </UserInfoWrapper>
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호확인</UserInfoLabel>
-            <Input
-              name="passwordCheck"
-              value={userInfo.passwordCheck}
-              onChange={handleInputChange}
-            />
+            <PasswordInput     placeholder="비밀번호확인"
+          value={passwordCheck}
+          onChange={(e) => setPasswordCheck(e.target.value)}
+        />
           </UserInfoWrapper>
         </UserInfoSection>
         <Separator size="lg" />
@@ -70,6 +104,12 @@ const ProfileEditPage = () => {
           <span>계정탈퇴</span>
         </DeleteAccount>
       </ProfileWrapper>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmSave}
+        message="프로필을 수정하시겠습니까?"
+      />
     </>
   );
 };
@@ -103,5 +143,4 @@ const DeleteAccount = styled.div`
   cursor: pointer;
   margin-top: 20px;
 `;
-
 export default ProfileEditPage;

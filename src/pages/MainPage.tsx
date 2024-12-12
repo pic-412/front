@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getRandomPlace, getPlaceDetails } from '@/api/placeAPI';
-import theme from '@/styles/theme';
+
+import LocationCard from '@/components/ui/LocationCard';
 
 interface RandomPlace {
   id: number;
@@ -84,17 +85,16 @@ const MainPage = () => {
         </CardContainer>
 
         {currentPlaceDetails && (
-          <PlaceDetailsModal onClick={() => setCurrentPlaceDetails(null)}>
-            <DetailsContent onClick={(e) => e.stopPropagation()}>
-              <PlaceDetailImage src={currentPlaceDetails.imageUrl} alt={currentPlaceDetails.name} />
-              <PlaceInfoSection>
-                <h2>{currentPlaceDetails.name}</h2>
-                <p>주소: {currentPlaceDetails.address}</p>
-                <p>운영 시간: {currentPlaceDetails.time}</p>
-                <CloseButton onClick={() => setCurrentPlaceDetails(null)}>닫기</CloseButton>
-              </PlaceInfoSection>
-            </DetailsContent>
-          </PlaceDetailsModal>
+          <DetailsOverlay onClick={() => setCurrentPlaceDetails(null)}>
+            <DetailsWrapper onClick={(e) => e.stopPropagation()}>
+              <LocationCard
+                name={currentPlaceDetails.name}
+                address={currentPlaceDetails.address}
+                time={currentPlaceDetails.time}
+                imageUrl={currentPlaceDetails.imageUrl}
+              />
+            </DetailsWrapper>
+          </DetailsOverlay>
         )}
       </MainContentSection>
     </PageWrapper>
@@ -129,7 +129,7 @@ const PlaceCard = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const PlaceDetailsModal = styled.div`
+const DetailsOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -142,33 +142,9 @@ const PlaceDetailsModal = styled.div`
   z-index: 1000;
 `;
 
-const DetailsContent = styled.div`
+const DetailsWrapper = styled.div`
   width: 90%;
-  max-width: 400px;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-`;
-
-const PlaceDetailImage = styled.img`
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-`;
-
-const PlaceInfoSection = styled.div`
-  padding: 20px;
-  text-align: center;
-`;
-
-const CloseButton = styled.button`
-  margin-top: 15px;
-  padding: 10px 20px;
-  background-color: ${theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  max-width: 500px;
 `;
 
 export default MainPage;

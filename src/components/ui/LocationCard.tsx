@@ -1,50 +1,48 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
-import Button from './Button';
+import Button from '@/components/ui/Button';
 
 interface LocationCardProps {
-  name?: string;
-  address?: string;
-  operatingHours?: string;
+  name: string;
+  address: string;
+  time: string;
+  imageUrl: string;
+  naverUrl: string;
+  onClose: () => void;
 }
 
-const LocationCard: React.FC<LocationCardProps> = ({
-  name = '장소명',
-  address,
-  operatingHours,
-}) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+const LocationCard: React.FC<LocationCardProps> = ({ name, address, time, naverUrl, onClose }) => {
+  const handleMapClick = () => {
+    window.open(naverUrl, '_blank');
   };
-
-  const hasExpandableContent = address || operatingHours;
 
   return (
     <CardContainer>
       <CardHeader>
         <CardTitle>{name}</CardTitle>
-        {hasExpandableContent && (
-          <Button size="sm" variant={isExpanded ? 'white' : undefined} onClick={toggleExpand}>
-            {isExpanded ? '닫기' : '더보기'}
-          </Button>
-        )}
       </CardHeader>
-      <CardContent isExpanded={isExpanded}>
+      <CardContent>
         <ContentInner>
           {address && (
             <InfoRow>
               <InfoLabel>주소</InfoLabel>
-              <InfoText>{address}</InfoText>
+              <InfoContentWrapper>
+                <InfoText>{address}</InfoText>
+                <MapButton variant="white" onClick={handleMapClick}>
+                  지도보기
+                </MapButton>
+              </InfoContentWrapper>
             </InfoRow>
           )}
-          {operatingHours && (
+          {time && (
             <InfoRow>
               <InfoLabel>운영시간</InfoLabel>
-              <InfoText>{operatingHours}</InfoText>
+              <InfoText>{time}</InfoText>
             </InfoRow>
           )}
+          <CloseButton size="sm" onClick={onClose}>
+            닫기
+          </CloseButton>
         </ContentInner>
       </CardContent>
     </CardContainer>
@@ -79,12 +77,11 @@ const CardTitle = styled.h3`
   margin: 0;
 `;
 
-const CardContent = styled.div<{ isExpanded: boolean }>`
+const CardContent = styled.div`
   background-color: #98d8b7;
-  height: ${(props) => (props.isExpanded ? 'auto' : '0')};
+  height: auto;
   overflow: hidden;
-  transition: height 0.3s ease-in-out;
-  padding-bottom: ${(props) => (props.isExpanded ? '8px' : '0')};
+  padding-bottom: 8px;
 `;
 
 const ContentInner = styled.div`
@@ -110,6 +107,31 @@ const InfoLabel = styled.span`
 const InfoText = styled.span`
   color: white;
   flex: 1;
+`;
+
+const InfoContentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+`;
+
+const MapButton = styled(Button)`
+  font-size: 12px;
+  width: 58px;
+  height: 27px;
+  border: 1px solid white;
+  border-radius: 8px;
+  margin-left: 10px;
+`;
+
+const CloseButton = styled(Button)`
+  justify-content: center;
+  align-items: center;
+  margin: 15px auto;
+  height: 32px;
+  width: 128px;
+  border-radius: 10px;
 `;
 
 export default LocationCard;

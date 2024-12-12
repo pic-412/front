@@ -17,7 +17,7 @@ interface PlaceDetails {
 export const getRandomPlace = async (): Promise<RandomPlace> => {
   try {
     const response = await axios.get<RandomPlace>(
-      'http://211.188.59.221/api/places/places/random/'
+      'https://211.188.59.221/api/places/places/random/'
     );
     return response.data;
   } catch (error) {
@@ -30,7 +30,7 @@ export const getRandomPlace = async (): Promise<RandomPlace> => {
 export const getPlaceDetails = async (placeId: number): Promise<PlaceDetails> => {
   try {
     const response = await axios.get<PlaceDetails>(
-      `http://211.188.59.221/api/places/places/${placeId}/`
+      `https://211.188.59.221/api/places/places/${placeId}/`
     );
     return response.data;
   } catch (error) {

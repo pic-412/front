@@ -1,25 +1,41 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { getProfile } from '@/api/accountAPI';
 import Button from '@/components/ui/Button';
 import theme from '@/styles/theme';
 import Separator from '@/components/ui/Separator';
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
-    email: 'abc123@naver.com',
-    nickname: 'abc123',
+    email: '',
+    nickname: '',
   });
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      console.log('fetchUserInfo');
-      setUserInfo(data);
-    };
-    fetchUserInfo();
-  }, []);
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/signin');
+          return;
+        }
 
-  const handleLogout = async () => {
-    await logoutUser();
+        const data = await getProfile(token);
+        setUserInfo(data);
+      } catch {
+        localStorage.removeItem('token');
+        navigate('/signin');
+      }
+    };
+
+    fetchUserInfo();
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
   };
 
   return (
@@ -44,10 +60,12 @@ const ProfilePage = () => {
             <UserInfoValue>보러가기</UserInfoValue>
           </UserInfoWrapper>
         </UserInfoSection>
+        <ButtonSection>
+          <LogoutButton variant="default" size="lg" onClick={handleLogout}>
+            로그아웃
+          </LogoutButton>
+        </ButtonSection>
       </ProfileWrapper>
-      <LogoutButton variant="default" size="lg" onClick={handleLogout}>
-        로그아웃
-      </LogoutButton>
     </>
   );
 };
@@ -100,4 +118,12 @@ const UserInfoValue = styled.div`
 const LogoutButton = styled(Button)`
   width: 100%;
 `;
+
+const ButtonSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+`;
+
 export default ProfilePage;

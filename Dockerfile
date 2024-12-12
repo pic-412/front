@@ -4,14 +4,13 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm ci
-COPY . . 
+COPY . .
 RUN npm run docker
 
-FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+FROM node:20-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 88
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npx", "http-server", "/usr/share/nginx/html", "-p", "88"]

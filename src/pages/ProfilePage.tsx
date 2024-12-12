@@ -33,6 +33,10 @@ const ProfilePage = () => {
     fetchUserInfo();
   }, [navigate]);
 
+  const handleEdit = () => {
+    navigate('/profile/edit');
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/');
@@ -51,7 +55,7 @@ const ProfilePage = () => {
             <UserInfoLabel>내 정보</UserInfoLabel>
             <UserEditWrapper>
               <UserInfoValue>{userInfo.nickname}</UserInfoValue>
-              <EditButton variant="white">수정하기</EditButton>
+              <EditButton variant="white" onClick={handleEdit}>수정하기</EditButton>
             </UserEditWrapper>
           </UserInfoWrapper>
           <Separator size="sm" />

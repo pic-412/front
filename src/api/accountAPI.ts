@@ -96,3 +96,40 @@ export const deleteAccount = async (token: string): Promise<void> => {
     throw new Error('네트워크 오류가 발생했습니다.');
   }
 };
+
+export const updateProfile = async (token: string, nickname: string, password?: string, passwordCheck?: string) => {
+  try {
+    // 기본 요청 데이터
+    const requestData: { nickname: string; password?: string; password_check?: string } = {
+      nickname,
+    };
+
+    // 비밀번호가 입력된 경우에만 포함
+    if (password && passwordCheck) {
+      requestData.password = password;
+      requestData.password_check = passwordCheck;
+    }
+
+    const response = await axios.put(
+      'https://211.188.59.221/api/accounts/profile',
+      requestData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error('프로필 업데이트에 실패했습니다.');
+    }
+
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.detail || '프로필 업데이트 중 오류가 발생했습니다.';
+      throw new Error(errorMessage);
+    }
+    throw new Error('네트워크 오류가 발생했습니다.');
+  }
+};

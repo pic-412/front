@@ -4,8 +4,47 @@ import Button from '@/components/ui/Button';
 import Separator from '@/components/ui/Separator';
 import Checkbox from '@/components/ui/Checkbox';
 import theme from '@/styles/theme';
+import { signUp } from '@/api/accountAPI';
+import { useState } from 'react';
 
 const SignUpPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [isAgreed, setIsAgreed] = useState(false);
+
+  const handleSignUp = async () => {
+    if (!email || !password || !passwordCheck) {
+      alert('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    if (password !== passwordCheck) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    if (!isAgreed) {
+      alert('개인정보 수집 및 이용에 동의해주세요.');
+      return;
+    }
+
+    try {
+      const response = await signUp({
+        email,
+        password,
+        password_check: passwordCheck,
+      });
+
+      alert('회원가입이 완료되었습니다.');
+      console.log(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
+  };
+
   return (
     <Container>
       <ContentWrapper>
@@ -14,35 +53,57 @@ const SignUpPage = () => {
           <Subtitle>PIC에서 만나 반가워요!</Subtitle>
         </Welcome>
         <Separator size="lg" />
-        <Input placeholder="이메일주소" />
+        <InputWrapper>
+          <Input
+            placeholder="이메일주소"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </InputWrapper>
         <Separator size="sm" />
-        <Input placeholder="비밀번호" />
+        <InputWrapper>
+          <Input
+            placeholder="비밀번호"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </InputWrapper>
         <Separator size="sm" />
-        <Input placeholder="비밀번호확인" />
+        <InputWrapper>
+          <Input
+            placeholder="비밀번호확인"
+            type="password"
+            value={passwordCheck}
+            onChange={(e) => setPasswordCheck(e.target.value)}
+          />
+        </InputWrapper>
         <Separator size="sm" />
         <CheckboxWrapper>
-          <Checkbox label="(필수) 개인정보 수집 및 이용 동의" />
+          <Checkbox
+            label="(필수) 개인정보 수집 및 이용 동의"
+            checked={isAgreed}
+            onChange={() => setIsAgreed(!isAgreed)}
+          />
         </CheckboxWrapper>
         <Separator size="lg" />
-        <Button size="md">회원가입</Button>
+        <Button size="md" onClick={handleSignUp}>
+          회원가입
+        </Button>
       </ContentWrapper>
     </Container>
   );
 };
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 26px;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 400px;
-  padding: 0 20px;
+  flex-direction: column;
 `;
 
 const Welcome = styled.div`
@@ -52,15 +113,17 @@ const Welcome = styled.div`
 `;
 
 const Title = styled.h1`
-  text-align: left;
   font-size: 24px;
   margin-bottom: 4px;
 `;
 
 const Subtitle = styled.h2`
-  text-align: left;
   font-size: 16px;
   font-weight: normal;
+`;
+
+const InputWrapper = styled.div`
+  width: 100%;
 `;
 
 const CheckboxWrapper = styled.div`

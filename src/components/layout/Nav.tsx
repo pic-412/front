@@ -23,7 +23,6 @@ const Navbar = () => {
           {({ isActive }) => (
             <div>
               <IconStyle src={isActive ? activeIcon : icon} alt={`${title}`} />
-              {''}
               <span>{title}</span>
             </div>
           )}
@@ -35,9 +34,6 @@ const Navbar = () => {
 
 const NavContainer = styled.div`
   display: flex;
-  border-top: 1px solid ${theme.colors.lightGray};
-  padding-top: 1px;
-  border-radius: 8px 8px 0 0;
   justify-content: space-around;
   align-items: center;
   width: 100%;
@@ -45,6 +41,7 @@ const NavContainer = styled.div`
   font-size: ${theme.fontSizes.normal};
   background-color: ${theme.colors.white};
 `;
+
 const NavItem = styled(NavLink)`
   display: flex;
   flex-direction: column;
@@ -52,6 +49,7 @@ const NavItem = styled(NavLink)`
   justify-content: center;
   text-decoration: none;
   color: inherit;
+
   & > div {
     display: flex;
     flex-direction: column;

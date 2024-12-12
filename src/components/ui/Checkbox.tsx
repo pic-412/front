@@ -2,8 +2,8 @@
 // Checkbox.tsx
 import theme from '@/styles/theme';
 import styled from '@emotion/styled';
-import checkboxIcon from '@/assets/images/icons/checkbox.svg';
-import checkedIcon from '@/assets/images/icons/checkbox_clicked.svg';
+import checkboxIcon from '@/assets/images/icons/checkbox.svg?raw'; // Vite에서 SVG import 시 ?raw 추가
+import checkedIcon from '@/assets/images/icons/checkbox_clicked.svg?raw';
 
 interface CheckboxProps {
   label: string;
@@ -13,6 +13,8 @@ interface CheckboxProps {
 
 const CheckboxWrapper = styled.div`
   display: flex;
+  width: 100%;
+  height: 48px;
   align-items: center;
   font-size: 16px;
   border: 3px solid ${theme.colors.gray};
@@ -24,7 +26,8 @@ const CheckboxWrapper = styled.div`
 const CheckboxInput = styled.div<{ checked?: boolean }>`
   width: 20px;
   height: 20px;
-  background: url(${(props) => (props.checked ? checkedIcon : checkboxIcon)});
+  background-image: url('data:image/svg+xml,${({ checked }) =>
+    encodeURIComponent(checked ? checkedIcon : checkboxIcon)}');
   background-size: 20px;
   background-position: center;
   background-repeat: no-repeat;
@@ -34,9 +37,10 @@ const CheckboxInput = styled.div<{ checked?: boolean }>`
 
 const CheckboxLabel = styled.label`
   cursor: pointer;
+  font-size: 16px;
 `;
 
-const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ label, checked = false, onChange }) => {
   return (
     <CheckboxWrapper>
       <CheckboxInput checked={checked} onClick={() => onChange?.(!checked)} />

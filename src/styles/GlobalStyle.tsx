@@ -160,12 +160,16 @@ const baseStyles = css`
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    position: relative;
   }
 
   header {
     background-color: ${theme.colors.white};
     padding: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
   main {
@@ -174,6 +178,8 @@ const baseStyles = css`
     flex-direction: column;
     justify-content: center;
     padding: 0 16px;
+    height: calc(100vh - 140px); // Subtract header and nav height
+    overflow-y: auto;
   }
 
   nav {
@@ -183,6 +189,10 @@ const baseStyles = css`
     align-items: center;
     padding: 16px 0;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    border-top: 1px solid ${theme.colors.lightGray};
   }
 
   .splash-screen {

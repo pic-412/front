@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
-import { getRandomPlace, getPlaceDetails } from '@/api/placeAPI';
+import { getRandomPlace, getPlaceDetails, likePlaceById } from '@/api/placeAPI';
 
 import LocationCard from '@/components/ui/LocationCard';
 
@@ -21,6 +21,8 @@ interface PlaceDetails {
 const MainPage = () => {
   const [places, setPlaces] = useState<RandomPlace[]>([]);
   const [currentPlaceDetails, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
+
+  const token = localStorage.getItem('token') || '';
 
   const fetchMorePlace = async () => {
     try {
@@ -55,7 +57,13 @@ const MainPage = () => {
 
   const onSwipe = async (direction: string, placeId: number) => {
     if (direction === 'right') {
-      await fetchPlaceDetails(placeId);
+      try {
+        await likePlaceById(placeId, token);
+        await fetchPlaceDetails(placeId);
+        console.log('좋아요 추가 성공');
+      } catch (error) {
+        console.error('좋아요 추가 실패:', error);
+      }
     }
   };
 
@@ -92,6 +100,10 @@ const MainPage = () => {
                 address={currentPlaceDetails.address}
                 time={currentPlaceDetails.time}
                 imageUrl={currentPlaceDetails.imageUrl}
+                naverUrl={''}
+                onClose={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
             </DetailsWrapper>
           </DetailsOverlay>

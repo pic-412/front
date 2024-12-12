@@ -22,9 +22,9 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       <ConfirmModalContainer onClick={(e) => e.stopPropagation()}>
         <ConfirmMessage>{message}</ConfirmMessage>
         <ButtonGroup>
-          <CancleButton size="sm" variant="white" onClick={onClose}>
+          <CancelButton size="sm" variant="white" onClick={onClose}>
             아니요
-          </CancleButton>
+          </CancelButton>
           <YesButton size="sm" onClick={onConfirm}>
             네
           </YesButton>
@@ -75,7 +75,7 @@ const YesButton = styled(Button)`
   box-shadow: 0px 4px 4px ${theme.colors.darkGray};
 `;
 
-const CancleButton = styled(Button)`
+const CancelButton = styled(Button)`
   width 59px;
   height: 35px;
   box-shadow: 0px 4px 4px ${theme.colors.darkGray};

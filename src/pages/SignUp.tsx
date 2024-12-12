@@ -101,7 +101,7 @@ const SignUpPage = () => {
         </CheckboxWrapper>
         <Separator size="lg" />
         <Button size="md" onClick={handleSignUp}>
-          회원가입
+          가입하기
         </Button>
       </ContentWrapper>
     </Container>

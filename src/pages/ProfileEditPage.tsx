@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Separator from '@/components/ui/Separator';
 import theme from '@/styles/theme';
+import { deleteAccount } from '@/api/accountAPI';
+import { Navigate } from 'react-router-dom';
 
 const ProfileEditPage = () => {
-  const [userInfo, setUserInfo] = useState({
-    email: 'abc123@naver.com',
-    nickname: 'abc123',
-    password: '',
-    passwordCheck: '',
-  });
+  const [userInfo, setUserInfo] = useState({});
 
   const handleInputChange = (e) => {
     setUserInfo({
@@ -23,6 +20,21 @@ const ProfileEditPage = () => {
   const handleSubmit = async () => {
     // Handle form submission and update user profile
     console.log('Submitting user info:', userInfo);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      if (window.confirm('정말 탈퇴하시겠습니까?')) {
+        await deleteAccount(token);
+        localStorage.removeItem('token');
+        Navigate('/signin');
+      }
+    } catch (error) {
+      console.error('회원탈퇴 실패:', error);
+    }
   };
 
   return (
@@ -53,7 +65,8 @@ const ProfileEditPage = () => {
         <Button size="md" onClick={handleSubmit}>
           저장
         </Button>
-        <DeleteAccount>
+
+        <DeleteAccount onClick={handleDeleteAccount}>
           <span>계정탈퇴</span>
         </DeleteAccount>
       </ProfileWrapper>

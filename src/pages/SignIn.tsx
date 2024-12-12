@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import Separator from '@/components/ui/Separator';
 import logo from '@/assets/images/logo.svg';
 import { signIn } from '@/api/accountAPI';
+import { useNavigate } from 'react-router-dom';
 
 const SignInPage = () => {
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
 
   const handleSignIn = async () => {
@@ -15,16 +17,22 @@ const SignInPage = () => {
       alert('이메일과 비밀번호를 모두 입력해주세요.');
       return;
     }
-
     try {
       const response = await signIn({
         email,
         password,
       });
+      const token = response.access;
+      if (token) {
+        localStorage.setItem('token', token);
+      } else {
+        console.error('토큰을 찾을 수 없습니다.');
+        alert('로그인 중 문제가 발생했습니다.');
+        return;
+      }
 
       alert('로그인에 성공했습니다.');
-      console.log(response);
-      // TODO: Add navigation or state management after successful login
+      navigate('/');
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -35,7 +43,7 @@ const SignInPage = () => {
   return (
     <Container>
       <ContentWrapper>
-        <Logo src={logo} alt="logo" />
+        <Logo src={logo} alt="logo" onClick={() => navigate('/')} />
         <Separator size="lg" />
         <Input placeholder="이메일주소" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Separator size="sm" />

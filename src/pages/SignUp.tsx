@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom'; // useNavigate import 추가
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import Separator from '@/components/ui/Separator';
@@ -8,6 +9,7 @@ import { signUp } from '@/api/accountAPI';
 import { useState } from 'react';
 
 const SignUpPage = () => {
+  const navigate = useNavigate(); // useNavigate 훅 추가
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -36,11 +38,22 @@ const SignUpPage = () => {
         password_check: passwordCheck,
       });
 
+      console.log('회원가입 응답:', response);
       alert('회원가입이 완료되었습니다.');
-      console.log(response);
+
+      // 회원가입 후 로그인 페이지로 이동
+      navigate('/signin');
     } catch (error) {
+      console.error('회원가입 에러:', error);
+
+      // 더 상세한 에러 처리
       if (error instanceof Error) {
-        alert(error.message);
+        // axios 에러인 경우 response 정보 확인
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const axiosError = error as any;
+        const errorMessage =
+          axiosError.response?.data?.message || error.message || '회원가입 중 오류가 발생했습니다.';
+        alert(errorMessage);
       }
     }
   };

@@ -1,20 +1,25 @@
-import { ConfirmModal, PlaceDetailModal } from '@/components/ui/Modal';
+import { ConfirmModal } from '@/components/ui/Modal';
+import { useState } from 'react';
 
 const MyPicPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirm = () => {
+    // 확인 처리 로직
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <ConfirmModal
-        isOpen={true}
-        onClose={() => {}}
-        onConfirm={() => {}}
-        message="정말 삭제하시겠습니까?"
-      />
-      <PlaceDetailModal
-        isOpen={true}
-        onClose={() => {}}
-        placeName="이디야커피"
-        address="서울특별시 강남구 역삼동 123-45"
-        operatingHours="10:00 ~ 22:00"
+        isOpen={isModalOpen}
+        onClose={handleClose}
+        onConfirm={handleConfirm}
+        message="정말 마이픽을 취소할까요?"
       />
     </>
   );

@@ -38,9 +38,13 @@ const ProfilePage = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     navigate('/');
   };
 
+  const handleMypic = () => {
+    navigate('/mypic');
+  };
   return (
     <>
       <ProfileWrapper>
@@ -62,7 +66,9 @@ const ProfilePage = () => {
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>MY PIC</UserInfoLabel>
-            <UserInfoValue>보러가기</UserInfoValue>
+            <EditButton variant="white" onClick={handleMypic}>
+              보러가기
+            </EditButton>
           </UserInfoWrapper>
         </UserInfoSection>
         <ButtonSection>

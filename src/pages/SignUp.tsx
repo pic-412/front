@@ -11,6 +11,8 @@ import { signUp } from '@/api/accountAPI';
 import PasswordInput from '@/components/ui/ShowPassword';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import TouModal from '@/components/ui/TouModal';
+import { useToast } from '@/components/ui/Toast';
+
 const SignUpPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -19,16 +21,14 @@ const SignUpPage = () => {
   const [isAgreed, setIsAgreed] = useState(false);
   const [isTouModalOpen, setIsTouModalOpen] = useState(false);
 
-  // 에러 상태 추가
+  const { Toast, showToast } = useToast();
   const [isError, setIsError] = useState(false);
   const [, setErrorMessage] = useState('');
 
   const handleSignUp = async () => {
-    // 초기 에러 상태 초기화
     setIsError(false);
     setErrorMessage('');
 
-    // 기존 유효성 검사 로직
     if (!email || !password || !passwordCheck) {
       setIsError(true);
       setErrorMessage('모든 필드를 입력해주세요.');
@@ -48,14 +48,14 @@ const SignUpPage = () => {
     }
 
     try {
-      const response = await signUp({
+      await signUp({
         email,
         password,
         password_check: passwordCheck,
       });
 
-      console.log('회원가입 응답:', response);
-      alert('회원가입이 완료되었습니다.');
+      showToast('회원가입이 완료되었습니다.');
+
       navigate('/signin');
     } catch (error) {
       setIsError(true);
@@ -284,7 +284,8 @@ const SignUpPage = () => {
   1. 개인정보 처리방침 버전번호 : v1.0.0
   2. 현재 개인정보 처리방침 고지일자 : 2024년 12월 15일
   3. 현재 개인정보 처리방침 시행일자 : 2024년 12월 15일`}
-        />{' '}
+        />
+        <Toast />
       </ContentWrapper>
     </Container>
   );

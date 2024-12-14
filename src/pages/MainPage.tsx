@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getRandomPlace, getPlaceDetails, likePlaceById } from '@/api/placeAPI';
-import CoachMark from '@/components/ui/CoachMark';
-import LocationCard from '@/components/ui/LocationCard';
+import CoachMark from '@/components/ui/MainCoachMark';
+import { useToast } from '@/components/ui/Toast';
 import SignupOverlay from '@/components/ui/SignupOverlay';
 import logo from '@/assets/images/logo.svg';
 
@@ -22,10 +22,11 @@ interface PlaceDetails {
 
 const MainPage = () => {
   const [places, setPlaces] = useState<RandomPlace[]>([]);
-  const [currentPlaceDetails, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
+  const [, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
   const [isSignupOverlayOpen, setIsSignupOverlayOpen] = useState(false);
   const token = localStorage.getItem('token') || '';
   const [showCoachMark, setShowCoachMark] = useState(false);
+  const { Toast, showToast } = useToast();
 
   const fetchMorePlace = async () => {
     try {
@@ -80,9 +81,9 @@ const MainPage = () => {
       try {
         await likePlaceById(placeId, token);
         await fetchPlaceDetails(placeId);
-        console.log('좋아요 추가 성공');
-      } catch (error) {
-        console.error('좋아요 추가 실패:', error);
+        showToast('마이픽에 추가했습니다.');
+      } catch {
+        showToast('이미 마이픽에 저장한 사진입니다.');
       }
     }
     await fetchMorePlace();
@@ -121,24 +122,8 @@ const MainPage = () => {
               </PlaceCard>
             </StyledTinderCard>
           ))}
+          <Toast />
         </CardContainer>
-
-        {currentPlaceDetails && (
-          <DetailsOverlay onClick={() => setCurrentPlaceDetails(null)}>
-            <DetailsWrapper onClick={(e) => e.stopPropagation()}>
-              <LocationCard
-                name={currentPlaceDetails.name}
-                address={currentPlaceDetails.address}
-                time={currentPlaceDetails.time}
-                imageUrl={currentPlaceDetails.imageUrl}
-                naverUrl={''}
-                onClose={function (): void {
-                  throw new Error('Function not implemented.');
-                }}
-              />
-            </DetailsWrapper>
-          </DetailsOverlay>
-        )}
 
         {isSignupOverlayOpen && (
           <SignupOverlay
@@ -148,7 +133,7 @@ const MainPage = () => {
           />
         )}
       </MainContentSection>{' '}
-      {showCoachMark && <CoachMark pageName="main" onClose={handleCloseCoachMark} />}
+      {showCoachMark && <CoachMark onClose={handleCloseCoachMark} />}
     </PageWrapper>
   );
 };
@@ -202,24 +187,6 @@ const Logo = styled.img`
   height: auto;
   opacity: 0.5; // 로고 투명도 조절
   z-index: 1;
-`;
-
-const DetailsOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const DetailsWrapper = styled.div`
-  width: 90%;
-  max-width: 500px;
 `;
 
 export default MainPage;

@@ -17,7 +17,7 @@ interface UserProfile {
 }
 export const signUp = async (userData: UserData) => {
   try {
-    const response = await axios.post('https://211.188.59.221/api/accounts/', userData);
+    const response = await axios.post('api/accounts/', userData);
 
     // 응답 로깅
     console.log('signUp 응답:', response);
@@ -45,7 +45,7 @@ export const signUp = async (userData: UserData) => {
 
 export const signIn = async (userData: UserData): Promise<AuthResponse> => {
   try {
-    const response = await axios.post('https://211.188.59.221/api/accounts/signin', userData);
+    const response = await axios.post('api/accounts/signin', userData);
     if (response.status === 200) {
       return response.data;
     } else {
@@ -61,7 +61,7 @@ export const signIn = async (userData: UserData): Promise<AuthResponse> => {
 
 export const getProfile = async (token: string): Promise<UserProfile> => {
   try {
-    const response = await axios.get('https://211.188.59.221/api/accounts/profile', {
+    const response = await axios.get('api/accounts/profile', {
       headers: {
         Authorization: token.startsWith('Bearer') ? token : `Bearer ${token}`,
       },
@@ -81,7 +81,7 @@ export const getProfile = async (token: string): Promise<UserProfile> => {
 
 export const deleteAccount = async (token: string): Promise<void> => {
   try {
-    const response = await axios.delete('https://211.188.59.221/api/accounts/profile', {
+    const response = await axios.delete('api/accounts/profile', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -97,7 +97,12 @@ export const deleteAccount = async (token: string): Promise<void> => {
   }
 };
 
-export const updateProfile = async (token: string, nickname: string, password?: string, passwordCheck?: string) => {
+export const updateProfile = async (
+  token: string,
+  nickname: string,
+  password?: string,
+  passwordCheck?: string
+) => {
   try {
     // 기본 요청 데이터
     const requestData: { nickname: string; password?: string; password_check?: string } = {
@@ -110,15 +115,11 @@ export const updateProfile = async (token: string, nickname: string, password?: 
       requestData.password_check = passwordCheck;
     }
 
-    const response = await axios.put(
-      'https://211.188.59.221/api/accounts/profile',
-      requestData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.put('api/accounts/profile', requestData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.status !== 200) {
       throw new Error('프로필 업데이트에 실패했습니다.');
@@ -127,7 +128,8 @@ export const updateProfile = async (token: string, nickname: string, password?: 
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.detail || '프로필 업데이트 중 오류가 발생했습니다.';
+      const errorMessage =
+        error.response?.data?.detail || '프로필 업데이트 중 오류가 발생했습니다.';
       throw new Error(errorMessage);
     }
     throw new Error('네트워크 오류가 발생했습니다.');

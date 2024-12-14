@@ -7,6 +7,7 @@ const colors = {
   darkGray: '#8E8e93',
   lightGray: '#E4E4E4',
   bg: '#FFFEF7', // 배경색
+  red: '#FF5C5C',
 };
 
 const fontSizes = {

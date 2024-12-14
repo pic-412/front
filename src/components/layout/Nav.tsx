@@ -37,7 +37,9 @@ const NavContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  padding: 16px 0;
+  padding: 12px 0;
+  border-top: 1px solid ${theme.colors.gray};
+  border-radius: 12px;
   font-size: ${theme.fontSizes.normal};
   background-color: ${theme.colors.white};
 `;

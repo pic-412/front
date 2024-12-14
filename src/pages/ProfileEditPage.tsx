@@ -13,7 +13,11 @@ const ProfileEditPage = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-  const [userInfo, setUserInfo] = useState<{ nickname: string; password: string; passwordCheck: string }>({
+  const [userInfo, setUserInfo] = useState<{
+    nickname: string;
+    password: string;
+    passwordCheck: string;
+  }>({
     nickname: '',
     password: '',
     passwordCheck: '',
@@ -27,7 +31,21 @@ const ProfileEditPage = () => {
     });
   };
 
+  const validatePasswords = () => {
+    const hasPassword = password.trim() !== '';
+    const hasPasswordCheck = passwordCheck.trim() !== '';
+
+    if (hasPassword !== hasPasswordCheck) {
+      alert('비밀번호와 비밀번호 확인은 모두 입력하거나 모두 비워두어야 합니다.');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
+    if (!validatePasswords()) {
+      return;
+    }
     setIsModalOpen(true);
   };
 
@@ -36,15 +54,12 @@ const ProfileEditPage = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const { nickname, password, passwordCheck } = userInfo;
-      
-      // 닉네임은 필수, 비밀번호는 선택적으로 전달
-      await updateProfile(
-        token,
-        nickname,
-        password || undefined,
-        passwordCheck || undefined
-      );
+      if (!validatePasswords()) {
+        return;
+      }
+
+      const { nickname } = userInfo;
+      await updateProfile(token, nickname, password || undefined, passwordCheck || undefined);
 
       setIsModalOpen(false);
       navigate('/profile');
@@ -80,18 +95,16 @@ const ProfileEditPage = () => {
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호</UserInfoLabel>
-            <PasswordInput 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+            <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
           </UserInfoWrapper>
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호확인</UserInfoLabel>
-            <PasswordInput     placeholder="비밀번호확인"
-          value={passwordCheck}
-          onChange={(e) => setPasswordCheck(e.target.value)}
-        />
+            <PasswordInput
+              placeholder="비밀번호확인"
+              value={passwordCheck}
+              onChange={(e) => setPasswordCheck(e.target.value)}
+            />
           </UserInfoWrapper>
         </UserInfoSection>
         <Separator size="lg" />

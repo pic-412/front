@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getRandomPlace, getPlaceDetails, likePlaceById } from '@/api/placeAPI';
-
+import CoachMark from '@/components/ui/CoachMark';
 import LocationCard from '@/components/ui/LocationCard';
 import SignupOverlay from '@/components/ui/SignupOverlay';
 import logo from '@/assets/images/logo.svg';
@@ -25,6 +25,7 @@ const MainPage = () => {
   const [currentPlaceDetails, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
   const [isSignupOverlayOpen, setIsSignupOverlayOpen] = useState(false);
   const token = localStorage.getItem('token') || '';
+  const [showCoachMark, setShowCoachMark] = useState(false);
 
   const fetchMorePlace = async () => {
     try {
@@ -33,6 +34,18 @@ const MainPage = () => {
     } catch (error) {
       console.error('장소를 가져오는 데 실패했습니다', error);
     }
+  };
+
+  useEffect(() => {
+    const hasVisitedMainPage = localStorage.getItem('mainPageVisited');
+    if (!hasVisitedMainPage) {
+      setShowCoachMark(true);
+    }
+  }, []);
+
+  const handleCloseCoachMark = () => {
+    setShowCoachMark(false);
+    localStorage.setItem('mainPageVisited', 'true');
   };
 
   useEffect(() => {
@@ -133,7 +146,8 @@ const MainPage = () => {
             onConfirm={handleConfirmSignup}
           />
         )}
-      </MainContentSection>
+      </MainContentSection>{' '}
+      {showCoachMark && <CoachMark pageName="main" onClose={handleCloseCoachMark} />}
     </PageWrapper>
   );
 };

@@ -6,22 +6,63 @@ interface CoachMarkProps {
   onClose: () => void;
 }
 
+// SVG 컴포넌트들을 인라인으로 정의
+const LeftArrowSvg = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M15 19L8 12L15 5"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const RightArrowSvg = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M9 5L16 12L9 19"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const CenterSvg = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
+    <circle cx="12" cy="12" r="7" stroke="currentColor" strokeWidth="2" />
+  </svg>
+);
+
 const CoachMark: React.FC<CoachMarkProps> = ({ pageName, onClose }) => {
   const coachMarkContent = {
     main: {
       title: '제주도 여행 장소 추천',
-      steps: [
-        '카드를 오른쪽으로 스와이프하면 마이픽에 저장됩니다.',
-        '관심 있는 장소의 자세한 정보를 확인할 수 있어요.',
-        '다양한 제주도 명소를 만나보세요!',
+      details: [
+        <>
+          마음에 드는 사진이라면 오른쪽으로 스와이프! <RightArrowSvg />
+        </>,
+        <>
+          사진이 마음에 들지 않는다면 왼쪽으로 스와이프! <LeftArrowSvg />
+        </>,
       ],
     },
     mypic: {
       title: '나의 찜한 장소',
-      steps: [
-        '좋아요 누른 장소들을 모아볼 수 있어요.',
-        '카드를 왼쪽으로 스와이프하면 마이픽에서 삭제됩니다.',
-        '장소를 클릭하면 상세 정보를 볼 수 있어요.',
+      details: [
+        <>
+          PIC을 취소하고 싶다면 왼쪽으로 스와이프! <LeftArrowSvg />
+        </>,
+        <>
+          장소 정보를 알고 싶다면 사진 클릭! <CenterSvg />
+        </>,
+        <>
+          사진이 마음에 들지 않는다면 왼쪽으로 스와이프! <RightArrowSvg />
+        </>,
       ],
     },
   };
@@ -32,14 +73,11 @@ const CoachMark: React.FC<CoachMarkProps> = ({ pageName, onClose }) => {
     <CoachMarkOverlay>
       <CoachMarkContainer>
         <Title>{content.title}</Title>
-        <StepList>
-          {content.steps.map((step, index) => (
-            <StepItem key={index}>
-              <StepNumber>{index + 1}</StepNumber>
-              {step}
-            </StepItem>
+        <Content>
+          {content.details.map((detail, index) => (
+            <ListItem key={index}>{detail}</ListItem>
           ))}
-        </StepList>
+        </Content>
         <CloseButton onClick={onClose}>시작하기</CloseButton>
       </CoachMarkContainer>
     </CoachMarkOverlay>
@@ -74,27 +112,22 @@ const Title = styled.h2`
   margin-bottom: 16px;
 `;
 
-const StepList = styled.ul`
+const Content = styled.ul`
   text-align: left;
   margin-bottom: 16px;
+  list-style-type: disc;
+  padding-left: 20px;
 `;
 
-const StepItem = styled.li`
+const ListItem = styled.li`
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
-`;
+  gap: 8px;
 
-const StepNumber = styled.span`
-  background: #007bff;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 const CloseButton = styled.button`

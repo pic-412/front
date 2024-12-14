@@ -19,7 +19,6 @@ const Header = () => {
   let headerContent;
   const currentPathKey = Object.keys(PATH).find(
     (key) => PATH[key as keyof typeof PATH] === currentPath
-
   );
 
   if (
@@ -31,9 +30,11 @@ const Header = () => {
     if (currentPathKey && PATH_TITLE[currentPathKey as keyof typeof PATH_TITLE]) {
       headerContent = (
         <StyledHeaderContainer>
-          <StyledBackButton onClick={handleGoBack}>
-            <img src={goback} width={35} alt="뒤로가기" />
-          </StyledBackButton>
+          {currentPath !== PATH.SIGNIN && (
+            <StyledBackButton onClick={handleGoBack}>
+              <img src={goback} width={35} alt="뒤로가기" />
+            </StyledBackButton>
+          )}
           <StyledTitle>{PATH_TITLE[currentPathKey as keyof typeof PATH_TITLE]}</StyledTitle>
         </StyledHeaderContainer>
       );

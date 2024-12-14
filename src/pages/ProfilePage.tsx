@@ -26,7 +26,7 @@ const ProfilePage = () => {
         setUserInfo(data);
       } catch {
         localStorage.removeItem('token');
-        navigate('/signin');
+        navigate('/');
       }
     };
 
@@ -55,7 +55,9 @@ const ProfilePage = () => {
             <UserInfoLabel>내 정보</UserInfoLabel>
             <UserEditWrapper>
               <UserInfoValue>{userInfo.nickname}</UserInfoValue>
-              <EditButton variant="white" onClick={handleEdit}>수정하기</EditButton>
+              <EditButton variant="white" onClick={handleEdit}>
+                수정하기
+              </EditButton>
             </UserEditWrapper>
           </UserInfoWrapper>
           <Separator size="sm" />

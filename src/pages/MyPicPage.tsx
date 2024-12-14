@@ -4,6 +4,7 @@ import TinderCard from 'react-tinder-card';
 import { getMyPic, unlikePlaceById, getPlaceDetails } from '@/api/placeAPI';
 import LocationCard from '@/components/ui/LocationCard';
 import { ConfirmModal } from '@/components/ui/Modal';
+import CoachMark from '@/components/ui/CoachMark';
 
 interface LikedPlace {
   id: number;
@@ -19,13 +20,24 @@ const MyPicPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
   const token = localStorage.getItem('token') || '';
+  const [showCoachMark, setShowCoachMark] = useState(false);
 
   useEffect(() => {
+    const hasVisitedMyPicPage = localStorage.getItem('myPicPageVisited');
+    if (!hasVisitedMyPicPage) {
+      setShowCoachMark(true);
+    }
+  }, []);
 
+  const handleCloseCoachMark = () => {
+    setShowCoachMark(false);
+    localStorage.setItem('myPicPageVisited', 'true');
+  };
+
+  useEffect(() => {
     if (token) {
       fetchLikedPlaces();
     }
-
   }, []);
 
   const fetchLikedPlaces = async () => {
@@ -67,18 +79,19 @@ const MyPicPage = () => {
     }
   };
 
-
   if (!token) {
     return (
       <LoginMessage>
         로그인을 하고, <br />
         <br />
         <br />
-        저장한 마이픽을 보세요.
+        저장한 My Pic을 모아보세요.
       </LoginMessage>
     );
   }
-
+  if (likedPlaces.length === 0) {
+    return <LoginMessage>MyPic 을 저장하세요.</LoginMessage>;
+  }
   return (
     <PageWrapper>
       <CardContainer>
@@ -95,7 +108,6 @@ const MyPicPage = () => {
           </StyledTinderCard>
         ))}
       </CardContainer>
-
       {currentPlace && (
         <DetailsOverlay onClick={() => setCurrentPlace(null)}>
           <DetailsWrapper onClick={(e) => e.stopPropagation()}>
@@ -110,13 +122,13 @@ const MyPicPage = () => {
           </DetailsWrapper>
         </DetailsOverlay>
       )}
-
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleUnlike}
         message="정말 마이픽을 취소할까요?"
-      />
+      />{' '}
+      {showCoachMark && <CoachMark pageName="mypic" onClose={handleCloseCoachMark} />}
     </PageWrapper>
   );
 };
@@ -165,7 +177,6 @@ const DetailsWrapper = styled.div`
   width: 90%;
   max-width: 500px;
 `;
-
 
 const LoginMessage = styled.div`
   display: flex;

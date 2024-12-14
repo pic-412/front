@@ -19,13 +19,13 @@ const PrivateRoute = () => {
   return <Outlet key={pathname} />;
 };
 
-const AppLayout = ({ includeHeaderNav = true }) => (
+const AppLayout = () => (
   <div className="app-wrapper">
     <Header />
     <main>
       <Outlet />
     </main>
-    {includeHeaderNav && <Navbar />}
+    <Navbar />
   </div>
 );
 AppLayout.propTypes = {

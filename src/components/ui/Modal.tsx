@@ -22,7 +22,6 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       <ConfirmModalContainer onClick={(e) => e.stopPropagation()}>
         <ConfirmMessage>{message}</ConfirmMessage>
         <ButtonGroup>
-
           <CancelButton size="sm" variant="white" onClick={onClose}>
             아니요
           </CancelButton>
@@ -77,9 +76,7 @@ const YesButton = styled(Button)`
   box-shadow: 0px 4px 4px ${theme.colors.darkGray};
 `;
 
-
-const CancleButton = styled(Button)`
-
+const CancelButton = styled(Button)`
   width 59px;
   height: 35px;
   box-shadow: 0px 4px 4px ${theme.colors.darkGray};

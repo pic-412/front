@@ -10,8 +10,8 @@ import MyPicPage from '@/pages/MyPicPage';
 import ProfilePage from '@/pages/ProfilePage';
 import ProfileEditPage from '@/pages/ProfileEditPage';
 import LocationPage from '@/pages/LocationPage';
-import Header from './components/layout/Header';
-import Navbar from './components/layout/Nav';
+import Header from '@/components/layout/Header';
+import Navbar from '@/components/layout/Nav';
 
 const PrivateRoute = () => {
   const { pathname } = useLocation();

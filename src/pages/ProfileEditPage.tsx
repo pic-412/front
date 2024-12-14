@@ -7,6 +7,7 @@ import theme from '@/styles/theme';
 import { deleteAccount, updateProfile } from '@/api/accountAPI';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmModal } from '@/components/ui/Modal';
+
 import PasswordInput from '@/components/ui/ShowPassword';
 
 const ProfileEditPage = () => {
@@ -18,6 +19,7 @@ const ProfileEditPage = () => {
     password: string;
     passwordCheck: string;
   }>({
+
     nickname: '',
     password: '',
     passwordCheck: '',
@@ -30,6 +32,7 @@ const ProfileEditPage = () => {
       [e.target.name]: e.target.value,
     });
   };
+
 
   const validatePasswords = () => {
     const hasPassword = password.trim() !== '';
@@ -46,6 +49,7 @@ const ProfileEditPage = () => {
     if (!validatePasswords()) {
       return;
     }
+
     setIsModalOpen(true);
   };
 
@@ -54,12 +58,14 @@ const ProfileEditPage = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
+
       if (!validatePasswords()) {
         return;
       }
 
       const { nickname } = userInfo;
       await updateProfile(token, nickname, password || undefined, passwordCheck || undefined);
+
 
       setIsModalOpen(false);
       navigate('/profile');
@@ -95,15 +101,19 @@ const ProfileEditPage = () => {
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호</UserInfoLabel>
+
             <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
+
           </UserInfoWrapper>
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호확인</UserInfoLabel>
+
             <PasswordInput
               placeholder="비밀번호확인"
               value={passwordCheck}
               onChange={(e) => setPasswordCheck(e.target.value)}
+
             />
           </UserInfoWrapper>
         </UserInfoSection>

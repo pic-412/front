@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getRandomPlace, getPlaceDetails, likePlaceById } from '@/api/placeAPI';
+
 import LocationCard from '@/components/ui/LocationCard';
 import SignupOverlay from '@/components/ui/SignupOverlay';
 import logo from '@/assets/images/logo.svg';
+
 
 interface RandomPlace {
   id: number;
@@ -24,6 +26,8 @@ const MainPage = () => {
   const [places, setPlaces] = useState<RandomPlace[]>([]);
   const [currentPlaceDetails, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
   const [isSignupOverlayOpen, setIsSignupOverlayOpen] = useState(false);
+  const token = localStorage.getItem('token') || '';
+
   const token = localStorage.getItem('token') || '';
 
   const fetchMorePlace = async () => {
@@ -58,10 +62,12 @@ const MainPage = () => {
   };
   const onSwipe = async (direction: string, placeId: number) => {
     if (direction === 'right') {
+
       if (!token) {
         setIsSignupOverlayOpen(true);
         return;
       }
+
       try {
         await likePlaceById(placeId, token);
         await fetchPlaceDetails(placeId);
@@ -131,6 +137,7 @@ const MainPage = () => {
             onClose={handleCloseSignupOverlay}
             onConfirm={handleConfirmSignup}
           />
+
         )}
       </MainContentSection>
     </PageWrapper>
@@ -181,12 +188,14 @@ const PlaceImage = styled.div`
   z-index: 2; // 로고 위에 올라오도록
 `;
 
+
 const Logo = styled.img`
   width: 100px; // 로고 크기 조절
   height: auto;
   opacity: 0.5; // 로고 투명도 조절
   z-index: 1;
 `;
+
 const DetailsOverlay = styled.div`
   position: fixed;
   top: 0;

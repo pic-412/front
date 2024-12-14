@@ -6,16 +6,21 @@ import Separator from '@/components/ui/Separator';
 import logo from '@/assets/images/logo.svg';
 import { signIn } from '@/api/accountAPI';
 import { useNavigate } from 'react-router-dom';
+
 import PasswordInput from '@/components/ui/ShowPassword';
 import theme from '@/styles/theme';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 
+
 const SignInPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
+
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -31,10 +36,12 @@ const SignInPage = () => {
       const token = response.access;
       if (token) {
         localStorage.setItem('token', token);
+
         navigate('/');
       } else {
         setIsError(true);
         setErrorMessage('로그인 중 문제가 발생했습니다.');
+
       }
     } catch {
       setIsError(true);
@@ -50,6 +57,7 @@ const SignInPage = () => {
       <ContentWrapper>
         <Logo src={logo} alt="logo" onClick={() => navigate('/')} />
         <Separator size="lg" />
+
         <Input
           placeholder="이메일주소"
           value={email}
@@ -63,17 +71,28 @@ const SignInPage = () => {
         <Separator size="sm" />
         <PasswordInput
           isError={isError}
+
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          style={{ position: 'relative' }}
         />
+        <EyeIcon 
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? <img src={closeeye} /> : <img src={openeye} />}
+        </EyeIcon>
+        </PasswordWrapper>
+
         <Separator size="lg" />
         <Button size="md" onClick={handleSignIn}>
           로그인
+
         </Button>{' '}
         <ErrorMessage message={errorMessage} isVisible={isError} />
         <SignUp onClick={handleSignUp}>
           <span>회원가입</span>
         </SignUp>
+
       </ContentWrapper>
     </Container>
   );
@@ -100,6 +119,11 @@ const Logo = styled.img`
   width: 100px;
   margin: 0 auto;
 `;
+const PasswordWrapper = styled.div`
+  position: relative;
+  
+`;
+
 
 const SignUp = styled.div`
   color: ${theme.colors.darkGray};

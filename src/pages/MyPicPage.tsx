@@ -21,9 +21,11 @@ const MyPicPage = () => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
+
     if (token) {
       fetchLikedPlaces();
     }
+
   }, []);
 
   const fetchLikedPlaces = async () => {
@@ -64,6 +66,7 @@ const MyPicPage = () => {
       }
     }
   };
+
 
   if (!token) {
     return (
@@ -163,6 +166,7 @@ const DetailsWrapper = styled.div`
   max-width: 500px;
 `;
 
+
 const LoginMessage = styled.div`
   display: flex;
   justify-content: center;
@@ -171,4 +175,5 @@ const LoginMessage = styled.div`
   font-size: 24px;
   color: #666;
 `;
+
 export default MyPicPage;

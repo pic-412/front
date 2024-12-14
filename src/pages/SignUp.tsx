@@ -68,7 +68,7 @@ const SignUpPage = () => {
         </Welcome>
         <Separator size="lg" />
         <InputWrapper>
-        <Input
+          <Input
             placeholder="이메일주소"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -76,19 +76,15 @@ const SignUpPage = () => {
         </InputWrapper>
         <Separator size="sm" />
         <InputWrapper>
-        <PasswordInput 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        
+          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
         </InputWrapper>
         <Separator size="sm" />
         <InputWrapper>
-        <PasswordInput     placeholder="비밀번호확인"
-          value={passwordCheck}
-          onChange={(e) => setPasswordCheck(e.target.value)}
-        />
-        
+          <PasswordInput
+            placeholder="비밀번호확인"
+            value={passwordCheck}
+            onChange={(e) => setPasswordCheck(e.target.value)}
+          />
         </InputWrapper>
         <Separator size="sm" />
         <CheckboxWrapper>
@@ -108,7 +104,11 @@ const SignUpPage = () => {
 };
 
 const Container = styled.div`
-  padding: 26px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
 `;
 
 const ContentWrapper = styled.div`
@@ -116,6 +116,8 @@ const ContentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 100%;
+  max-width: 400px;
 `;
 
 const Welcome = styled.div`

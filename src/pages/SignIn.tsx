@@ -8,20 +8,19 @@ import { signIn } from '@/api/accountAPI';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from '@/components/ui/ShowPassword';
 import theme from '@/styles/theme';
-
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
 
 const SignInPage = () => {
-  const [email, setEmail] = useState('');
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-const handleSignUp = () => {
-    navigate('/signup');
-  };
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      alert('이메일과 비밀번호를 모두 입력해주세요.');
+      setIsError(true);
+      setErrorMessage('이메일과 비밀번호를 모두 입력해주세요.');
       return;
     }
     try {
@@ -32,42 +31,49 @@ const handleSignUp = () => {
       const token = response.access;
       if (token) {
         localStorage.setItem('token', token);
+        navigate('/');
       } else {
-        console.error('토큰을 찾을 수 없습니다.');
-        alert('로그인 중 문제가 발생했습니다.');
-        return;
+        setIsError(true);
+        setErrorMessage('로그인 중 문제가 발생했습니다.');
       }
-
-      alert('로그인에 성공했습니다.');
-      navigate('/');
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
+    } catch {
+      setIsError(true);
+      setErrorMessage('이메일 또는 비밀번호를 다시 확인해주세요.');
     }
   };
 
+  const handleSignUp = () => {
+    navigate('/signup');
+  };
   return (
     <Container>
       <ContentWrapper>
         <Logo src={logo} alt="logo" onClick={() => navigate('/')} />
         <Separator size="lg" />
-        <Input placeholder="이메일주소" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input
+          placeholder="이메일주소"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{
+            borderColor: isError ? 'red' : '#ccc',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+          }}
+        />
         <Separator size="sm" />
-        <PasswordInput 
+        <PasswordInput
+          isError={isError}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
         <Separator size="lg" />
         <Button size="md" onClick={handleSignIn}>
           로그인
-        </Button><Separator size="sm" />
-  
+        </Button>{' '}
+        <ErrorMessage message={errorMessage} isVisible={isError} />
         <SignUp onClick={handleSignUp}>
           <span>회원가입</span>
         </SignUp>
-        
       </ContentWrapper>
     </Container>
   );
@@ -94,10 +100,11 @@ const Logo = styled.img`
   width: 100px;
   margin: 0 auto;
 `;
-        
+
 const SignUp = styled.div`
   color: ${theme.colors.darkGray};
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 120px;
 `;
+
 export default SignInPage;

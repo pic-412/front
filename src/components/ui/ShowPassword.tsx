@@ -9,12 +9,16 @@ interface PasswordInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  style?: React.CSSProperties;
+  isError?: boolean;
 }
 
-const PasswordInput: React.FC<PasswordInputProps> = ({ 
-  value, 
-  onChange, 
-  placeholder = "비밀번호" 
+const PasswordInput: React.FC<PasswordInputProps> = ({
+  value,
+  onChange,
+  placeholder = '비밀번호',
+  style,
+  isError = false,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,12 +28,17 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
 
   return (
     <PasswordWrapper>
-      <Input
+      <StyledInput
         placeholder={placeholder}
-        type={showPassword ? "text" : "password"}
+        type={showPassword ? 'text' : 'password'}
         value={value}
         onChange={onChange}
-        style={{ position: 'relative' }}
+        style={{
+          ...style,
+          borderColor: isError ? 'red' : '#ccc',
+          borderWidth: '1px',
+          borderStyle: 'solid',
+        }}
       />
       <EyeIcon onClick={togglePasswordVisibility}>
         {showPassword ? <img src={closeeye} /> : <img src={openeye} />}
@@ -40,11 +49,17 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
 
 const PasswordWrapper = styled.div`
   position: relative;
+  width: 100%;
+`;
+
+const StyledInput = styled(Input)`
+  width: 100%;
+  padding-right: 50px;
 `;
 
 const EyeIcon = styled.div`
   position: absolute;
-  right: 20px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;

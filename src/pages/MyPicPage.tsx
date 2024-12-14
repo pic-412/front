@@ -21,7 +21,9 @@ const MyPicPage = () => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
-    fetchLikedPlaces();
+    if (token) {
+      fetchLikedPlaces();
+    }
   }, []);
 
   const fetchLikedPlaces = async () => {
@@ -62,6 +64,17 @@ const MyPicPage = () => {
       }
     }
   };
+
+  if (!token) {
+    return (
+      <LoginMessage>
+        로그인을 하고, <br />
+        <br />
+        <br />
+        저장한 마이픽을 보세요.
+      </LoginMessage>
+    );
+  }
 
   return (
     <PageWrapper>
@@ -150,4 +163,12 @@ const DetailsWrapper = styled.div`
   max-width: 500px;
 `;
 
+const LoginMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 24px;
+  color: #666;
+`;
 export default MyPicPage;

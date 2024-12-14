@@ -7,6 +7,7 @@ import Checkbox from '@/components/ui/Checkbox';
 import theme from '@/styles/theme';
 import { signUp } from '@/api/accountAPI';
 import { useState } from 'react';
+import PasswordInput from '@/components/ui/ShowPassword';
 
 const SignUpPage = () => {
   const navigate = useNavigate(); // useNavigate 훅 추가
@@ -75,18 +76,12 @@ const SignUpPage = () => {
         </InputWrapper>
         <Separator size="sm" />
         <InputWrapper>
-          <Input
-            placeholder="비밀번호"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
         </InputWrapper>
         <Separator size="sm" />
         <InputWrapper>
-          <Input
+          <PasswordInput
             placeholder="비밀번호확인"
-            type="password"
             value={passwordCheck}
             onChange={(e) => setPasswordCheck(e.target.value)}
           />
@@ -109,7 +104,11 @@ const SignUpPage = () => {
 };
 
 const Container = styled.div`
-  padding: 26px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
 `;
 
 const ContentWrapper = styled.div`
@@ -117,6 +116,8 @@ const ContentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 100%;
+  max-width: 400px;
 `;
 
 const Welcome = styled.div`

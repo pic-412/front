@@ -6,23 +6,26 @@ import Separator from '@/components/ui/Separator';
 import logo from '@/assets/images/logo.svg';
 import { signIn } from '@/api/accountAPI';
 import { useNavigate } from 'react-router-dom';
-import openeye from '@/assets/images/icons/oepneye.svg';
-import closeeye from '@/assets/images/icons/closeeye.svg';
+
+import PasswordInput from '@/components/ui/ShowPassword';
+import theme from '@/styles/theme';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
 
 
 const SignInPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
-const handleSignUp = () => {
-    navigate('/signup');
-  };
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      alert('이메일과 비밀번호를 모두 입력해주세요.');
+      setIsError(true);
+      setErrorMessage('이메일과 비밀번호를 모두 입력해주세요.');
       return;
     }
     try {
@@ -33,33 +36,42 @@ const handleSignUp = () => {
       const token = response.access;
       if (token) {
         localStorage.setItem('token', token);
-      } else {
-        console.error('토큰을 찾을 수 없습니다.');
-        alert('로그인 중 문제가 발생했습니다.');
-        return;
-      }
 
-      alert('로그인에 성공했습니다.');
-      navigate('/');
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
+        navigate('/');
+      } else {
+        setIsError(true);
+        setErrorMessage('로그인 중 문제가 발생했습니다.');
+
       }
+    } catch {
+      setIsError(true);
+      setErrorMessage('이메일 또는 비밀번호를 다시 확인해주세요.');
     }
   };
 
+  const handleSignUp = () => {
+    navigate('/signup');
+  };
   return (
     <Container>
       <ContentWrapper>
         <Logo src={logo} alt="logo" onClick={() => navigate('/')} />
         <Separator size="lg" />
-        <Input placeholder="이메일주소" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <Separator size="sm" />
-        <PasswordWrapper>
 
         <Input
-          placeholder="비밀번호"
-          type={showPassword ? "text" : "password"}
+          placeholder="이메일주소"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{
+            borderColor: isError ? 'red' : '#ccc',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+          }}
+        />
+        <Separator size="sm" />
+        <PasswordInput
+          isError={isError}
+
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{ position: 'relative' }}
@@ -74,10 +86,13 @@ const handleSignUp = () => {
         <Separator size="lg" />
         <Button size="md" onClick={handleSignIn}>
           로그인
-        </Button><Separator size="sm" />
-        <Button size="md" variant='white' onClick={handleSignUp}>
-          회원가입
-        </Button>
+
+        </Button>{' '}
+        <ErrorMessage message={errorMessage} isVisible={isError} />
+        <SignUp onClick={handleSignUp}>
+          <span>회원가입</span>
+        </SignUp>
+
       </ContentWrapper>
     </Container>
   );
@@ -109,12 +124,11 @@ const PasswordWrapper = styled.div`
   
 `;
 
-const EyeIcon = styled.div`
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+
+const SignUp = styled.div`
+  color: ${theme.colors.darkGray};
   cursor: pointer;
-  z-index: 1;
+  margin-top: 120px;
 `;
+
 export default SignInPage;

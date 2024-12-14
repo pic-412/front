@@ -1,9 +1,13 @@
+ 
 import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getRandomPlace, getPlaceDetails, likePlaceById } from '@/api/placeAPI';
 
 import LocationCard from '@/components/ui/LocationCard';
+import SignupOverlay from '@/components/ui/SignupOverlay';
+import logo from '@/assets/images/logo.svg';
+
 
 interface RandomPlace {
   id: number;
@@ -21,6 +25,8 @@ interface PlaceDetails {
 const MainPage = () => {
   const [places, setPlaces] = useState<RandomPlace[]>([]);
   const [currentPlaceDetails, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
+  const [isSignupOverlayOpen, setIsSignupOverlayOpen] = useState(false);
+  const token = localStorage.getItem('token') || '';
 
   const token = localStorage.getItem('token') || '';
 
@@ -29,7 +35,7 @@ const MainPage = () => {
       const newPlace = await getRandomPlace();
       setPlaces((prev) => [...prev, newPlace]);
     } catch (error) {
-      console.error('새로운 장소를 가져오는 데 실패했습니다', error);
+      console.error('장소를 가져오는 데 실패했습니다', error);
     }
   };
 
@@ -54,9 +60,14 @@ const MainPage = () => {
       console.error('장소 상세 정보를 가져오는 데 실패했습니다', error);
     }
   };
-
   const onSwipe = async (direction: string, placeId: number) => {
     if (direction === 'right') {
+
+      if (!token) {
+        setIsSignupOverlayOpen(true);
+        return;
+      }
+
       try {
         await likePlaceById(placeId, token);
         await fetchPlaceDetails(placeId);
@@ -65,13 +76,21 @@ const MainPage = () => {
         console.error('좋아요 추가 실패:', error);
       }
     }
+    await fetchMorePlace();
   };
 
   const onCardLeftScreen = (placeId: number) => {
     setPlaces((prev) => prev.filter((place) => place.id !== placeId));
-    fetchMorePlace();
   };
 
+  const handleCloseSignupOverlay = () => {
+    setIsSignupOverlayOpen(false);
+  };
+
+  const handleConfirmSignup = () => {
+    setIsSignupOverlayOpen(false);
+    // 회원가입 페이지로 이동
+  };
   return (
     <PageWrapper>
       <MainContentSection>
@@ -83,11 +102,14 @@ const MainPage = () => {
               onCardLeftScreen={() => onCardLeftScreen(place.id)}
               preventSwipe={['up', 'down']}
             >
-              <PlaceCard
-                style={{
-                  backgroundImage: `url(${place.imageUrl})`,
-                }}
-              ></PlaceCard>
+              <PlaceCard>
+                <Logo src={logo} alt="Logo" />
+                <PlaceImage
+                  style={{
+                    backgroundImage: `url(${place.imageUrl})`,
+                  }}
+                />
+              </PlaceCard>
             </StyledTinderCard>
           ))}
         </CardContainer>
@@ -107,6 +129,15 @@ const MainPage = () => {
               />
             </DetailsWrapper>
           </DetailsOverlay>
+        )}
+
+        {isSignupOverlayOpen && (
+          <SignupOverlay
+            isOpen={isSignupOverlayOpen}
+            onClose={handleCloseSignupOverlay}
+            onConfirm={handleConfirmSignup}
+          />
+
         )}
       </MainContentSection>
     </PageWrapper>
@@ -130,15 +161,39 @@ const StyledTinderCard = styled(TinderCard)`
   width: 95%;
   height: 80vh;
 `;
-
 const PlaceCard = styled.div`
   position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: white; // 하얀색 배경 추가
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+
+  // 로고를 위한 중앙 배치 스타일
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PlaceImage = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
   border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 2; // 로고 위에 올라오도록
+`;
+
+
+const Logo = styled.img`
+  width: 100px; // 로고 크기 조절
+  height: auto;
+  opacity: 0.5; // 로고 투명도 조절
+  z-index: 1;
 `;
 
 const DetailsOverlay = styled.div`

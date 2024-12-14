@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import PasswordInput from '@/components/ui/ShowPassword';
 import theme from '@/styles/theme';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
+import checkboxIcon from '@/assets/images/icons/checkbox.svg?raw';
+import checkedIcon from '@/assets/images/icons/checkbox_clicked.svg?raw';
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ const SignInPage = () => {
 
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isRememberMe, setIsRememberMe] = useState(false);
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -34,6 +37,17 @@ const SignInPage = () => {
       if (token) {
         localStorage.setItem('token', token);
 
+        // const { access: accessToken, refresh: refreshToken } = response;
+
+        // if (accessToken && refreshToken) {
+        //   localStorage.setItem('accessToken', accessToken);
+        //   localStorage.setItem('refreshToken', refreshToken);
+        //   if (isRememberMe) {
+        //     localStorage.setItem('rememberedEmail', email);
+        //   } else {
+        //     localStorage.removeItem('rememberedEmail');
+        //   }
+
         navigate('/');
       } else {
         setIsError(true);
@@ -48,20 +62,32 @@ const SignInPage = () => {
   const handleSignUp = () => {
     navigate('/signup');
   };
+
+  const handleLoginRemember = () => {
+    setIsRememberMe((prev) => !prev);
+    if (!isRememberMe) {
+      localStorage.removeItem('refreshToken');
+    }
+  };
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setIsRememberMe(true);
+    }
+  }, []);
+
   return (
     <Container>
       <ContentWrapper>
         <Logo src={logo} alt="logo" onClick={() => navigate('/')} />
         <Separator size="lg" />
-        <Input
+        <InputEmail
           placeholder="이메일주소"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            borderColor: isError ? 'red' : '#ccc',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-          }}
+          isError={isError}
         />
         <Separator size="sm" />
         <PasswordInput
@@ -69,15 +95,21 @@ const SignInPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{ position: 'relative' }}
-        />
+        />{' '}
+        <Checkit>
+          <Logining>
+            <Checkbox onClick={handleLoginRemember} checked={isRememberMe} />
+            로그인 유지
+          </Logining>
+          <SignUp onClick={handleSignUp}>
+            <span>회원가입</span>
+          </SignUp>
+        </Checkit>
         <Separator size="lg" />
         <Button size="md" onClick={handleSignIn}>
           로그인
         </Button>{' '}
         <ErrorMessage message={errorMessage} isVisible={isError} />
-        <SignUp onClick={handleSignUp}>
-          <span>회원가입</span>
-        </SignUp>
       </ContentWrapper>
     </Container>
   );
@@ -99,15 +131,50 @@ const ContentWrapper = styled.div`
   max-width: 400px;
   padding: 0 20px;
 `;
-
+const InputEmail = styled(Input)`
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid ${(props) => (props.isError ? 'red' : '#ccc')};
+  margin-bottom: 10px;
+`;
 const Logo = styled.img`
   width: 100px;
   margin: 0 auto;
 `;
+
+const Checkit = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+const Logining = styled.div`
+  color: ${theme.colors.darkGray};
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Checkbox = styled.div<{ checked?: boolean }>`
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml,${({ checked }) =>
+    encodeURIComponent(checked ? checkedIcon : checkboxIcon)}');
+  background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-right: 8px;
+  cursor: pointer;
+`;
 const SignUp = styled.div`
   color: ${theme.colors.darkGray};
   cursor: pointer;
-  margin-top: 120px;
+  text-align: right;
+  align-self: flex-end;
 `;
 
 export default SignInPage;

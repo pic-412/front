@@ -13,6 +13,7 @@ interface LocationCardProps {
 
 const LocationCard: React.FC<LocationCardProps> = ({ name, address, time, naverUrl, onClose }) => {
   const handleMapClick = () => {
+    console.log(naverUrl);
     window.open(naverUrl, '_blank');
   };
 
@@ -51,11 +52,12 @@ const LocationCard: React.FC<LocationCardProps> = ({ name, address, time, naverU
 
 const CardContainer = styled.div`
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   border-radius: 8px;
   overflow: hidden;
-  display: flex;
   flex-direction: column;
+  display: flex;
+  margin: 0 auto;
 `;
 
 const CardHeader = styled.div`

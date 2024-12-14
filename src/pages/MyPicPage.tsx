@@ -12,6 +12,7 @@ interface LikedPlace {
   address: string;
   time: string;
   imageUrl: string;
+  naverUrl: string;
 }
 
 const MyPicPage = () => {
@@ -116,7 +117,7 @@ const MyPicPage = () => {
               address={currentPlace.address}
               time={currentPlace.time}
               imageUrl={currentPlace.imageUrl}
-              naverUrl=""
+              naverUrl={currentPlace.naverUrl}
               onClose={() => setCurrentPlace(null)}
             />
           </DetailsWrapper>
@@ -127,7 +128,7 @@ const MyPicPage = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleUnlike}
         message="정말 마이픽을 취소할까요?"
-      />{' '}
+      />
       {showCoachMark && <CoachMark pageName="mypic" onClose={handleCloseCoachMark} />}
     </PageWrapper>
   );

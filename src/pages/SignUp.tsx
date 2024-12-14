@@ -85,12 +85,12 @@ const SignUpPage = () => {
   return (
     <Container>
       <ContentWrapper>
-        <Welcome>
-          <Title>혼저 옵서예</Title>
-          <Subtitle>PIC에서 만나 반가워요!</Subtitle>
-        </Welcome>
-        <Separator size="lg" />
         <InputWrapper>
+          <Welcome>
+            <Title>혼저 옵서예</Title>
+            <Subtitle>PIC에서 만나 반가워요!</Subtitle>
+          </Welcome>
+          <Separator size="lg" />
           <Input
             placeholder="이메일주소"
             value={email}
@@ -107,9 +107,7 @@ const SignUpPage = () => {
               isVisible={true}
             />
           )}
-        </InputWrapper>
-        <Separator size="sm" />
-        <InputWrapper>
+          <Separator size="sm" />
           <PasswordInput
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -121,9 +119,7 @@ const SignUpPage = () => {
               isVisible={true}
             />
           )}
-        </InputWrapper>
-        <Separator size="sm" />
-        <InputWrapper>
+          <Separator size="sm" />
           <PasswordInput
             placeholder="비밀번호확인"
             value={passwordCheck}
@@ -136,9 +132,7 @@ const SignUpPage = () => {
           {isError && password !== passwordCheck && (
             <ErrorMessage message="비밀번호가 일치하지 않아요." isVisible={true} />
           )}
-        </InputWrapper>
-        <Separator size="sm" />
-        <CheckboxWrapper>
+          <Separator size="sm" />
           <Checkbox
             label="(필수) 개인정보 수집 및 이용 동의"
             checked={isAgreed}
@@ -147,19 +141,17 @@ const SignUpPage = () => {
           {isError && !isAgreed && (
             <ErrorMessage message="개인정보 수집 및 이용에 동의해주세요." isVisible={true} />
           )}
-        </CheckboxWrapper>
+        </InputWrapper>
         <Separator size="lg" />
         <Button size="md" onClick={handleSignUp}>
           가입하기
         </Button>
-      </ContentWrapper>
-
-      {/* TOU 모달 */}
-      <TouModal
-        isOpen={isTouModalOpen}
-        onConfirm={handleTouAgree}
-        onClose={handleTouModalClose}
-        message={`
+        {/* TOU 모달 */}
+        <TouModal
+          isOpen={isTouModalOpen}
+          onConfirm={handleTouAgree}
+          onClose={handleTouModalClose}
+          message={`
   **PIC**(이하 “회사”)의 본 개인정보처리방침은 이용자가 회사가 관리 · 운영하는 서비스 웹과 모바일 웹에서 제공하는 서비스(이하 ‘서비스라 합니다)를 이용함에 적용되며, 다음과 같은 내용을 담고 있습니다.
 
   ### 제1조 개인정보의 처리(수집·이용) 목적
@@ -292,10 +284,12 @@ const SignUpPage = () => {
   1. 개인정보 처리방침 버전번호 : v1.0.0
   2. 현재 개인정보 처리방침 고지일자 : 2024년 12월 15일
   3. 현재 개인정보 처리방침 시행일자 : 2024년 12월 15일`}
-      />
+        />{' '}
+      </ContentWrapper>
     </Container>
   );
 };
+
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -320,21 +314,15 @@ const Welcome = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 4px;
 `;
 
 const Subtitle = styled.h2`
-  font-size: 16px;
+  font-size: 20px;
   font-weight: normal;
 `;
 
-const InputWrapper = styled.div`
-  width: 100%;
-`;
-
-const CheckboxWrapper = styled.div`
-  width: 100%;
-`;
+const InputWrapper = styled.div``;
 
 export default SignUpPage;

@@ -64,6 +64,7 @@ const MainPage = () => {
   const fetchPlaceDetails = async (placeId: number) => {
     try {
       const details = await getPlaceDetails(placeId);
+      console.log('details:', details);
       setCurrentPlaceDetails(details);
     } catch (error) {
       console.error('장소 상세 정보를 가져오는 데 실패했습니다', error);

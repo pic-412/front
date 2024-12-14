@@ -38,7 +38,6 @@ const ProfilePage = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
     navigate('/');
   };
 

@@ -55,7 +55,7 @@ const ModalOverlay = styled.div`
 
 const ConfirmModalContainer = styled.div`
   width: 100%;
-  max-width: 600px;
+  max-width: 400px;
   max-height: 80vh;
   background-color: ${theme.colors.white};
   border-radius: 10px;

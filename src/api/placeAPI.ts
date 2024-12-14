@@ -11,6 +11,7 @@ interface PlaceDetails {
   address: string;
   time: string;
   imageUrl: string;
+  naverUrl: string;
 }
 
 interface PlaceImage {
@@ -24,6 +25,7 @@ interface MyPicPlace {
   address: string;
   time: string;
   imageUrl: string;
+  naverUrl: string;
 }
 
 // 랜덤 장소 가져오기

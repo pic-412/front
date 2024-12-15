@@ -8,30 +8,20 @@ import Separator from '@/components/ui/Separator';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token') || '';
+
   const [userInfo, setUserInfo] = useState({
     email: '',
     nickname: '',
   });
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/signin');
-          return;
-        }
-
-        const data = await getProfile(token);
-        setUserInfo(data);
-      } catch {
-        localStorage.removeItem('token');
-        navigate('/');
-      }
+    const fetchProfile = async () => {
+      const data = await getProfile(token);
+      setUserInfo(data);
     };
-
-    fetchUserInfo();
-  }, [navigate]);
+    fetchProfile();
+  }, [token]);
 
   const handleEdit = () => {
     navigate('/profile/edit');
@@ -45,6 +35,20 @@ const ProfilePage = () => {
   const handleMypic = () => {
     navigate('/mypic');
   };
+
+  const handleSignin = () => {
+    navigate('/signin');
+  };
+
+  if (!token) {
+    return (
+      <LoginMessage>
+        <h1>로그인 후 이용하기</h1>
+        <LoginButton onClick={handleSignin}>로그인하기</LoginButton>
+      </LoginMessage>
+    );
+  }
+
   return (
     <>
       <ProfileWrapper>
@@ -65,10 +69,13 @@ const ProfilePage = () => {
           </UserInfoWrapper>
           <Separator size="sm" />
           <UserInfoWrapper>
-            <UserInfoLabel>MY PIC</UserInfoLabel>
-            <EditButton variant="white" onClick={handleMypic}>
-              보러가기
-            </EditButton>
+            <UserInfoLabel>마이픽</UserInfoLabel>
+            <UserEditWrapper>
+              <UserInfoValue></UserInfoValue>
+              <EditButton variant="white" onClick={handleMypic}>
+                보러가기
+              </EditButton>
+            </UserEditWrapper>
           </UserInfoWrapper>
         </UserInfoSection>
         <ButtonSection>
@@ -137,4 +144,25 @@ const ButtonSection = styled.div`
   margin-top: 20px;
 `;
 
+const LoginMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 24px;
+  font-weight: 600;
+  color: ${theme.colors.primary};
+  gap: 50px;
+`;
+
+const LoginButton = styled(Button)`
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 16px;
+  color: ${theme.colors.white};
+  background-color: ${theme.colors.primary};
+`;
 export default ProfilePage;

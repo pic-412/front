@@ -80,21 +80,11 @@ export const getProfile = async (token: string): Promise<UserProfile> => {
 };
 
 export const deleteAccount = async (token: string): Promise<void> => {
-  try {
-    const response = await axios.delete('https://211.188.59.221/api/accounts/profile', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.status !== 200) {
-      throw new Error('회원탈퇴에 실패했습니다.');
-    }
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error.response?.data || new Error('회원탈퇴 중 오류가 발생했습니다.');
-    }
-    throw new Error('네트워크 오류가 발생했습니다.');
-  }
+  await axios.delete('https://211.188.59.221/api/accounts/profile', {
+    headers: {
+      Authorization: token.includes(' ') ? token : `Bearer ${token}`,
+    },
+  });
 };
 
 export const updateProfile = async (

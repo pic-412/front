@@ -115,7 +115,7 @@ const SignInPage = () => {
         <Checkit>
           <Logining>
             <Checkbox onClick={handleLoginRemember} checked={isRememberMe} />
-            로그인 유지
+            자동 로그인
           </Logining>
           <SignUp onClick={handleSignUp}>
             <span>회원가입</span>

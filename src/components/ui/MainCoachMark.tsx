@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import LeftArrowSvg from '@/assets/images/icons/arrow_left.svg';
 import RightArrowSvg from '@/assets/images/icons/arrow_right.svg';
@@ -8,6 +8,14 @@ interface CoachMarkProps {
 }
 
 const MainCoachMark: React.FC<CoachMarkProps> = ({ onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
   return (
     <CoachMarkOverlay>
       <CoachMarkContainer>
@@ -90,8 +98,8 @@ const Left = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: -200px;
-  right: 10px;
+  top: -100px;
+  right: 15px;
   width: 30px;
   height: 30px;
   border: none;

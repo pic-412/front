@@ -71,9 +71,11 @@ const MainPage = () => {
       console.error('장소 상세 정보를 가져오는 데 실패했습니다', error);
     }
   };
+
   const onSwipe = async (direction: string, placeId: number) => {
     if (direction === 'right') {
       if (!token) {
+        await getRandomPlace();
         setIsSignupOverlayOpen(true);
         return;
       }
@@ -82,8 +84,10 @@ const MainPage = () => {
         await likePlaceById(placeId, token);
         await fetchPlaceDetails(placeId);
         showToast('마이픽에 추가했습니다.');
+        await getRandomPlace();
       } catch {
         showToast('이미 마이픽에 저장한 사진입니다.');
+        await getRandomPlace();
       }
     }
     await fetchMorePlace();
@@ -99,8 +103,8 @@ const MainPage = () => {
 
   const handleConfirmSignup = () => {
     setIsSignupOverlayOpen(false);
-    // 회원가입 페이지로 이동
   };
+
   return (
     <PageWrapper>
       <MainContentSection>

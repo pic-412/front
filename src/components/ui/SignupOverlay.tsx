@@ -26,9 +26,9 @@ const SignupOverlay: React.FC<SignupOverlayProps> = ({ isOpen, onClose }) => {
     <Overlay onClick={onClose}>
       <OverlayContent onClick={(e) => e.stopPropagation()}>
         <Message>
-          방금 PIC한 제주도의 장소가
+          사진으로 보는
           <br />
-          궁금하다면?
+          제주도의 장소가 궁금하다면?
         </Message>
         <ButtonGroup>
           <Button size="lg" onClick={handleSignIn}>

@@ -19,12 +19,13 @@ const ProfileEditPage = () => {
     password: string;
     passwordCheck: string;
   }>({
-
     nickname: '',
     password: '',
     passwordCheck: '',
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
+  const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo({
@@ -32,7 +33,6 @@ const ProfileEditPage = () => {
       [e.target.name]: e.target.value,
     });
   };
-
 
   const validatePasswords = () => {
     const hasPassword = password.trim() !== '';
@@ -56,8 +56,10 @@ const ProfileEditPage = () => {
   const handleConfirmSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) return;
-
+      if (!token) {
+        alert('로그인 정보가 없습니다. 다시 로그인해주세요.');
+        return;
+      }
 
       if (!validatePasswords()) {
         return;
@@ -65,7 +67,6 @@ const ProfileEditPage = () => {
 
       const { nickname } = userInfo;
       await updateProfile(token, nickname, password || undefined, passwordCheck || undefined);
-
 
       setIsModalOpen(false);
       navigate('/profile');
@@ -76,18 +77,19 @@ const ProfileEditPage = () => {
   };
 
   const handleDeleteAccount = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
+    setIsDeleteAccountModalOpen(true);
+    setDeleteErrorMessage(''); // Reset any previous error messages
+  };
 
-      if (window.confirm('정말 탈퇴하시겠습니까?')) {
-        await deleteAccount(token);
-        localStorage.removeItem('token');
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('회원탈퇴 실패:', error);
+  const confirmDeleteAccount = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('로그인 정보가 없습니다. 다시 로그인해주세요.');
     }
+    const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+    await deleteAccount(formattedToken);
+    localStorage.removeItem('token');
+    navigate('/signin', { state: { message: '계정이 성공적으로 탈퇴되었습니다.' } });
   };
 
   return (
@@ -101,19 +103,15 @@ const ProfileEditPage = () => {
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호</UserInfoLabel>
-
             <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
-
           </UserInfoWrapper>
           <Separator size="sm" />
           <UserInfoWrapper>
             <UserInfoLabel>비밀번호확인</UserInfoLabel>
-
             <PasswordInput
               placeholder="비밀번호확인"
               value={passwordCheck}
               onChange={(e) => setPasswordCheck(e.target.value)}
-
             />
           </UserInfoWrapper>
         </UserInfoSection>
@@ -126,12 +124,20 @@ const ProfileEditPage = () => {
         <DeleteAccount onClick={handleDeleteAccount}>
           <span>계정탈퇴</span>
         </DeleteAccount>
+
+        {deleteErrorMessage && <ErrorMessage>{deleteErrorMessage}</ErrorMessage>}
       </ProfileWrapper>
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleConfirmSave}
         message="프로필을 수정하시겠습니까?"
+      />
+      <ConfirmModal
+        isOpen={isDeleteAccountModalOpen}
+        onClose={() => setIsDeleteAccountModalOpen(false)}
+        onConfirm={confirmDeleteAccount}
+        message="정말 탈퇴하시겠습니까?"
       />
     </>
   );
@@ -166,4 +172,11 @@ const DeleteAccount = styled.div`
   cursor: pointer;
   margin-top: 20px;
 `;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+`;
+
 export default ProfileEditPage;

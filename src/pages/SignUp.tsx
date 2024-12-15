@@ -111,7 +111,7 @@ const SignUpPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             isError={isError}
           />
-          {isError && password === '' && (
+          {isError && (
             <ErrorMessage
               message="8~23자 영문 대소문자, 숫자, 특수문자를 사용하세요."
               isVisible={true}
@@ -313,12 +313,12 @@ const Welcome = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 28px;
-  margin-bottom: 4px;
+  font-size: 40px;
+  margin-bottom: 10px;
 `;
 
 const Subtitle = styled.h2`
-  font-size: 20px;
+  font-size: 29px;
   font-weight: normal;
 `;
 

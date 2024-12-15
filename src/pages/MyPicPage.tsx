@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getMyPic, unlikePlaceById, getPlaceDetails } from '@/api/placeAPI';
@@ -6,6 +6,9 @@ import LocationCard from '@/components/ui/LocationCard';
 import { ConfirmModal } from '@/components/ui/Modal';
 import MypicCoachMark from '@/components/ui/MypicCoachMark';
 import { useToast } from '@/components/ui/Toast';
+import Button from '@/components/ui/Button';
+import theme from '@/styles/theme';
+import { useNavigate } from 'react-router-dom';
 
 interface LikedPlace {
   id: number;
@@ -113,19 +116,31 @@ const MyPicPage = () => {
     }
   };
 
+  const navigate = useNavigate();
+  const handleSignin = () => {
+    navigate('/signin');
+  };
+
   if (!token) {
     return (
       <LoginMessage>
-        로그인을 하고, <br />
-        <br />
-        <br />
-        저장한 My Pic을 모아보세요.
+        <h1>로그인 후 이용하기</h1>
+        <LoginButton onClick={handleSignin}>로그인하기</LoginButton>
       </LoginMessage>
     );
   }
 
+  const handleGoMain = () => {
+    navigate('/');
+  };
   if (likedPlaces.length === 0) {
-    return <LoginMessage>MyPic 을 저장하세요.</LoginMessage>;
+    return (
+      <NoPic>
+        <p>PIC한 사진이 없어요 :(</p>
+        <span>마음에 드는 제주의 장소를 골라보세요.</span>
+        <div onClick={handleGoMain}>메인 페이지로 가기</div>
+      </NoPic>
+    );
   }
 
   return (
@@ -226,11 +241,46 @@ const DetailsWrapper = styled.div`
 
 const LoginMessage = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   font-size: 24px;
-  color: #666;
+  font-weight: 600;
+  color: ${theme.colors.primary};
+  gap: 50px;
 `;
 
+const LoginButton = styled(Button)`
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 16px;
+  color: ${theme.colors.white};
+  background-color: ${theme.colors.primary};
+`;
+
+const NoPic = styled.div`
+  display: flex;
+  flex-direction: column;
+  line-height: 1.7;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 29px;
+  font-weight: 400;
+  color: ${theme.colors.primary};
+  span {
+    font-size: 16px;
+    font-weight: 400;
+  }
+  div {
+    cursor: pointer;
+    margin-top: 30px;
+    color: ${theme.colors.black};
+    text-decoration: underline;
+    font-size: 22px;
+  }
+`;
 export default MyPicPage;

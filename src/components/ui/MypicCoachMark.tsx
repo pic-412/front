@@ -12,7 +12,7 @@ const MypicCoachMark: React.FC<CoachMarkProps> = ({ onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 5000);
+    }, 30000);
 
     return () => clearTimeout(timer);
   }, [onClose]);
@@ -84,9 +84,10 @@ const Content = styled.div`
 const CloseButton = styled.button`
   position: absolute;
   top: -50px;
+  font-size: 20px;
   right: 15px;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border: none;
   border-radius: 8px;
   cursor: pointer;

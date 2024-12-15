@@ -97,6 +97,7 @@ const SignUpPage = () => {
               borderColor: isError ? 'red' : '#ccc',
               borderWidth: '1px',
               borderStyle: 'solid',
+              width: '100%',
             }}
           />
           {isError && email === '' && (
@@ -110,6 +111,7 @@ const SignUpPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             isError={isError}
+            style={{ width: '100%' }}
           />
           {isError && (
             <ErrorMessage
@@ -123,6 +125,7 @@ const SignUpPage = () => {
             value={passwordCheck}
             onChange={(e) => setPasswordCheck(e.target.value)}
             isError={isError}
+            style={{ width: '100%' }}
           />
           {isError && passwordCheck === '' && (
             <ErrorMessage message="비밀번호를 다시 한번 입력해주세요." isVisible={true} />
@@ -322,6 +325,8 @@ const Subtitle = styled.h2`
   font-weight: normal;
 `;
 
-const InputWrapper = styled.div``;
+const InputWrapper = styled.div`
+  width: 90%;
+`;
 
 export default SignUpPage;

@@ -17,7 +17,7 @@ const ScreenSequence = () => {
         setShowCoach(true);
         localStorage.setItem('hasSeenCoachMark', 'true');
       }
-    }, 6000);
+    }, 30000);
 
     return () => clearTimeout(splashTimer);
   }, []);

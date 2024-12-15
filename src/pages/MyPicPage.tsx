@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getMyPic, unlikePlaceById, getPlaceDetails } from '@/api/placeAPI';
@@ -28,6 +28,12 @@ const MyPicPage = () => {
   const [showCoachMark, setShowCoachMark] = useState(false);
   const { showToast, Toast } = useToast();
   const token = localStorage.getItem('token') || '';
+
+  // 터치 및 클릭 상태 관리를 위한 ref와 상태
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const hasVisitedMyPicPage = localStorage.getItem('myPicPageVisited');
@@ -61,32 +67,29 @@ const MyPicPage = () => {
   };
 
   const handleSwipe = async (direction: string) => {
-    if (likedPlaces.length === 0) return;
+    if (likedPlaces.length === 0 || isAnimating) return;
+
+    setIsAnimating(true);
 
     if (direction === 'left') {
       const currentPlace = likedPlaces[currentIndex];
       setSelectedPlaceId(currentPlace.id);
       setIsModalOpen(true);
-      setCurrentPlace(null);
-      await fetchLikedPlaces();
     } else if (direction === 'right') {
       const nextIndex = (currentIndex + 1) % likedPlaces.length;
       setCurrentIndex(nextIndex);
-      await fetchLikedPlaces();
-    } else if (direction === 'up' || direction === 'down') {
-      try {
-        const place = likedPlaces[currentIndex];
-        const details = await getPlaceDetails(place.id);
-        setCurrentPlace(details);
-      } catch (error) {
-        console.error('장소 상세 정보를 가져오는데 실패했습니다', error);
-        showToast('장소 정보를 불러오는데 실패했습니다');
-      }
     }
+
+    // 애니메이션 후 상태 초기화
+    setTimeout(async () => {
+      await fetchLikedPlaces();
+      setIsAnimating(false);
+    }, 300);
   };
 
   const handleCardClick = async () => {
-    if (likedPlaces.length === 0) return;
+    if (likedPlaces.length === 0 || isAnimating) return;
+
     try {
       const currentPlace = likedPlaces[currentIndex];
       const details = await getPlaceDetails(currentPlace.id);
@@ -97,13 +100,39 @@ const MyPicPage = () => {
     }
   };
 
+  // 모바일 터치 이벤트 핸들러
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (isAnimating) return;
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (isAnimating) return;
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (isAnimating) return;
+
+    const diffX = touchStartX.current - touchEndX.current;
+    const cardWidth = cardRef.current ? cardRef.current.offsetWidth : 0;
+    const swipeThreshold = cardWidth * 0.3; // 카드 너비의 30%를 스와이프 임계값으로 설정
+
+    if (Math.abs(diffX) > swipeThreshold) {
+      // 충분히 멀리 스와이프한 경우
+      handleSwipe(diffX > 0 ? 'left' : 'right');
+    } else if (Math.abs(diffX) < 10) {
+      // 거의 움직이지 않은 경우 (클릭으로 간주)
+      handleCardClick();
+    }
+  };
+
   const handleUnlike = async () => {
     if (selectedPlaceId) {
       try {
         await unlikePlaceById(selectedPlaceId, token);
         const updatedPlaces = likedPlaces.filter((place) => place.id !== selectedPlaceId);
         setLikedPlaces(updatedPlaces);
-        console.log('updatedPlaces:', updatedPlaces);
         showToast('마이픽이 삭제되었습니다', 'success');
         if (currentIndex >= updatedPlaces.length) {
           setCurrentIndex(updatedPlaces.length > 0 ? updatedPlaces.length - 1 : 0);
@@ -133,6 +162,7 @@ const MyPicPage = () => {
   const handleGoMain = () => {
     navigate('/');
   };
+
   if (likedPlaces.length === 0) {
     return (
       <NoPic>
@@ -155,7 +185,12 @@ const MyPicPage = () => {
             className={index === currentIndex ? 'active' : 'inactive'}
           >
             <PlaceCard
+              ref={cardRef}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
               onClick={handleCardClick}
+              $isAnimating={isAnimating}
               style={{ backgroundImage: `url(${place.imageUrl})` }}
             />
           </StyledTinderCard>
@@ -189,6 +224,26 @@ const MyPicPage = () => {
   );
 };
 
+// 스타일드 컴포넌트에 애니메이션 추가
+const PlaceCard = styled.div<{ $isAnimating?: boolean }>`
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+
+  ${(props) =>
+    props.$isAnimating &&
+    `
+    transform: scale(0.9) rotate(${Math.random() * 10 - 5}deg);
+    opacity: 0.7;
+  `}
+`;
+
+// 나머지 스타일드 컴포넌트들은 이전과 동일
 const PageWrapper = styled.div`
   position: relative;
   width: 100%;
@@ -209,16 +264,6 @@ const StyledTinderCard = styled(TinderCard)`
   position: absolute;
   width: 95%;
   height: 80vh;
-`;
-
-const PlaceCard = styled.div`
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
 `;
 
 const DetailsOverlay = styled.div`
@@ -283,4 +328,5 @@ const NoPic = styled.div`
     font-size: 22px;
   }
 `;
+
 export default MyPicPage;

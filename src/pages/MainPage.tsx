@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
 import { getRandomPlace, getPlaceDetails, likePlaceById } from '@/api/placeAPI';
-import CoachMark from '@/components/ui/MainCoachMark';
 import { useToast } from '@/components/ui/Toast';
 import SignupOverlay from '@/components/ui/SignupOverlay';
 import logo from '@/assets/images/logo.svg';
@@ -25,7 +24,6 @@ const MainPage = () => {
   const [, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
   const [isSignupOverlayOpen, setIsSignupOverlayOpen] = useState(false);
   const token = localStorage.getItem('token') || '';
-  const [showCoachMark, setShowCoachMark] = useState(false);
   const { Toast, showToast } = useToast();
 
   const fetchMorePlace = async () => {
@@ -40,14 +38,9 @@ const MainPage = () => {
   useEffect(() => {
     const hasVisitedMainPage = localStorage.getItem('mainPageVisited');
     if (!hasVisitedMainPage) {
-      setShowCoachMark(true);
+      localStorage.setItem('mainPageVisited', 'true');
     }
   }, []);
-
-  const handleCloseCoachMark = () => {
-    setShowCoachMark(false);
-    localStorage.setItem('mainPageVisited', 'true');
-  };
 
   useEffect(() => {
     const fetchInitialPlaces = async () => {
@@ -137,7 +130,6 @@ const MainPage = () => {
           />
         )}
       </MainContentSection>{' '}
-      {showCoachMark && <CoachMark onClose={handleCloseCoachMark} />}
     </PageWrapper>
   );
 };

@@ -17,7 +17,7 @@ interface UserProfile {
 }
 export const signUp = async (userData: UserData) => {
   try {
-    const response = await axios.post('https://211.188.59.221/api/accounts/', userData);
+    const response = await axios.post('/api/accounts/', userData);
 
     // 응답 로깅
     console.log('signUp 응답:', response);
@@ -45,7 +45,7 @@ export const signUp = async (userData: UserData) => {
 
 export const signIn = async (userData: UserData): Promise<AuthResponse> => {
   try {
-    const response = await axios.post('https://211.188.59.221/api/accounts/signin', userData);
+    const response = await axios.post('/api/accounts/signin', userData);
     if (response.status === 200) {
       return response.data;
     } else {
@@ -61,7 +61,7 @@ export const signIn = async (userData: UserData): Promise<AuthResponse> => {
 
 export const getProfile = async (token: string): Promise<UserProfile> => {
   try {
-    const response = await axios.get('https://211.188.59.221/api/accounts/profile', {
+    const response = await axios.get('/api/accounts/profile', {
       headers: {
         Authorization: token.startsWith('Bearer') ? token : `Bearer ${token}`,
       },
@@ -80,7 +80,7 @@ export const getProfile = async (token: string): Promise<UserProfile> => {
 };
 
 export const deleteAccount = async (token: string): Promise<void> => {
-  await axios.delete('https://211.188.59.221/api/accounts/profile', {
+  await axios.delete('/api/accounts/profile', {
     headers: {
       Authorization: token.includes(' ') ? token : `Bearer ${token}`,
     },
@@ -105,7 +105,7 @@ export const updateProfile = async (
       requestData.password_check = passwordCheck;
     }
 
-    const response = await axios.put('https://211.188.59.221/api/accounts/profile', requestData, {
+    const response = await axios.put('/api/accounts/profile', requestData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

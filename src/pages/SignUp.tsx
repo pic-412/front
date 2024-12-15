@@ -21,7 +21,7 @@ const SignUpPage = () => {
   const [isAgreed, setIsAgreed] = useState(false);
   const [isTouModalOpen, setIsTouModalOpen] = useState(false);
 
-  const { Toast, showToast } = useToast();
+  const { Toast } = useToast();
   const [isError, setIsError] = useState(false);
   const [, setErrorMessage] = useState('');
 
@@ -54,9 +54,7 @@ const SignUpPage = () => {
         password_check: passwordCheck,
       });
 
-      showToast('회원가입이 완료되었습니다.');
-
-      navigate('/signin');
+      navigate('/signin', { state: { message: '회원가입이 완료되었습니다.' } });
     } catch (error) {
       setIsError(true);
       // 에러 메시지 처리

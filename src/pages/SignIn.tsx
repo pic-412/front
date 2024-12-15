@@ -5,13 +5,14 @@ import Button from '@/components/ui/Button';
 import Separator from '@/components/ui/Separator';
 import logo from '@/assets/images/logo.svg';
 import { signIn } from '@/api/accountAPI';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import PasswordInput from '@/components/ui/ShowPassword';
 import theme from '@/styles/theme';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import checkboxIcon from '@/assets/images/icons/checkbox.svg?raw';
 import checkedIcon from '@/assets/images/icons/checkbox_clicked.svg?raw';
+import { useToast } from '@/components/ui/Toast';
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -21,7 +22,8 @@ const SignInPage = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isRememberMe, setIsRememberMe] = useState(false);
-
+  const location = useLocation();
+  const { Toast, showToast, hideToast } = useToast();
   const handleSignIn = async () => {
     if (!email || !password) {
       setIsError(true);
@@ -78,9 +80,23 @@ const SignInPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (location.state && location.state.message) {
+      showToast(location.state.message);
+
+      const timer = setTimeout(() => {
+        hideToast();
+      }, 2000);
+
+      // 컴포넌트 언마운트 시 타이머 정리
+      return () => clearTimeout(timer);
+    }
+  }, [location, showToast, hideToast]);
+
   return (
     <Container>
       <ContentWrapper>
+        <Toast />
         <Logo src={logo} alt="logo" onClick={() => navigate('/')} />
         <Separator size="lg" />
         <InputEmail

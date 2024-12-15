@@ -64,12 +64,21 @@ const MyPicPage = () => {
       const currentPlace = likedPlaces[currentIndex];
       setSelectedPlaceId(currentPlace.id);
       setIsModalOpen(true);
-    }
-
-    if (direction === 'right') {
-      // Move to next place
+      setCurrentPlace(null);
+      await fetchLikedPlaces();
+    } else if (direction === 'right') {
       const nextIndex = (currentIndex + 1) % likedPlaces.length;
       setCurrentIndex(nextIndex);
+      await fetchLikedPlaces();
+    } else if (direction === 'up' || direction === 'down') {
+      try {
+        const place = likedPlaces[currentIndex];
+        const details = await getPlaceDetails(place.id);
+        setCurrentPlace(details);
+      } catch (error) {
+        console.error('장소 상세 정보를 가져오는데 실패했습니다', error);
+        showToast('장소 정보를 불러오는데 실패했습니다');
+      }
     }
   };
 

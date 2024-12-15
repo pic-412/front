@@ -31,7 +31,9 @@ interface MyPicPlace {
 // 랜덤 장소 가져오기
 export const getRandomPlace = async (): Promise<RandomPlace> => {
   try {
-    const response = await axios.get<RandomPlace>('api/places/places/random/');
+    const response = await axios.get<RandomPlace>(
+      'https://211.188.59.221/api/places/places/random/'
+    );
     return response.data;
   } catch (error) {
     console.error('랜덤 장소를 가져오는 중 오류 발생:', error);
@@ -42,7 +44,9 @@ export const getRandomPlace = async (): Promise<RandomPlace> => {
 // 장소 ID로 세부 정보 가져오기
 export const getPlaceDetails = async (placeId: number): Promise<PlaceDetails> => {
   try {
-    const response = await axios.get<PlaceDetails>(`api/places/places/${placeId}/`);
+    const response = await axios.get<PlaceDetails>(
+      `https://211.188.59.221/api/places/places/${placeId}/`
+    );
     return response.data;
   } catch (error) {
     console.error('장소 세부 정보를 가져오는 중 오류 발생:', error);
@@ -53,7 +57,7 @@ export const getPlaceDetails = async (placeId: number): Promise<PlaceDetails> =>
 export const likePlaceById = async (placeId: number, token: string): Promise<void> => {
   try {
     await axios.post(
-      `api/places/places/${placeId}/likes`,
+      `https://211.188.59.221/api/places/places/${placeId}/likes`,
       {},
       {
         headers: {
@@ -70,7 +74,7 @@ export const likePlaceById = async (placeId: number, token: string): Promise<voi
 
 export const unlikePlaceById = async (placeId: number, token: string): Promise<void> => {
   try {
-    await axios.delete(`api/places/places/${placeId}/likes`, {
+    await axios.delete(`https://211.188.59.221/api/places/places/${placeId}/likes`, {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: '*/*',
@@ -84,7 +88,7 @@ export const unlikePlaceById = async (placeId: number, token: string): Promise<v
 
 export const getPlaceImages = async (token: string): Promise<PlaceImage[]> => {
   try {
-    const response = await axios.get<PlaceImage[]>('api/places/places/pic', {
+    const response = await axios.get<PlaceImage[]>('https://211.188.59.221/api/places/places/pic', {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: '*/*',
@@ -100,7 +104,7 @@ export const getPlaceImages = async (token: string): Promise<PlaceImage[]> => {
 // 좋아요한 장소 목록 가져오기
 export const getMyPic = async (token: string): Promise<MyPicPlace[]> => {
   try {
-    const response = await axios.get('api/places/places/pic', {
+    const response = await axios.get('https://211.188.59.221/api/places/places/pic', {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: '*/*',

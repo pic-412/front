@@ -11,6 +11,6 @@ FROM node:20-alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 88
+EXPOSE 80
 
-CMD ["npx", "http-server", "/usr/share/nginx/html", "-p", "88"]
+CMD ["npx", "http-server", "/usr/share/nginx/html", "-p", "80"]

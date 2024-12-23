@@ -33,10 +33,8 @@ jobs:
           password: ${{ secrets.NCP_PASSWORD }}
           port: ${{ secrets.NCP_PORT }}
           script: |
-            docker pull sjgaru/pic064:latest
-            docker stop pic064 || true
-            docker rm pic064 || true
-            docker run -d --name pic064 \
-              -p 80:80 -p 443:443 \
-              -v /etc/nginx/ssl:/etc/nginx/ssl \
-              sjgaru/pic064:latest
+            sudo docker pull sjgaru/pic064:latest
+            ${{ secrets.NCP_PASSWORD }}
+            sudo docker stop pic064 || true
+            sudo docker rm pic064 || true
+            sudo docker run -d --name pic064 -p 8080:80 sjgaru/pic064:latest

@@ -47,6 +47,7 @@ const MainPage = () => {
       try {
         const fetchedPlaces = await Promise.all([getRandomPlace()]);
         setPlaces(fetchedPlaces.reverse());
+        console.log('도커추가버전 241223 2155');
       } catch (error) {
         console.error('랜덤 장소들을 가져오는 데 실패했습니다', error);
       }

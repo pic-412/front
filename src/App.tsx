@@ -1,16 +1,17 @@
-import PropTypes from 'prop-types';
 import { createBrowserRouter, Outlet, RouterProvider, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-import Header from '@/components/layout/Header';
-import Navbar from '@/components/layout/Nav';
 import { PATH } from '@/constants/path';
-import NotFoundPage from '@/pages/404';
+
 import MainPage from '@/pages/MainPage';
-import MyPicPage from '@/pages/MyPicPage';
-import ProfileEditPage from '@/pages/ProfileEditPage';
-import ProfilePage from '@/pages/ProfilePage';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
+import MyPicPage from '@/pages/MyPicPage';
+import ProfilePage from '@/pages/ProfilePage';
+import ProfileEditPage from '@/pages/ProfileEditPage';
+import LocationPage from '@/pages/LocationPage';
+import Header from '@/components/layout/Header';
+import Navbar from '@/components/layout/Nav';
 
 const PrivateRoute = () => {
   const { pathname } = useLocation();
@@ -49,10 +50,7 @@ const App = () => {
                 { path: PATH.PROFILE_EDIT, element: <ProfileEditPage /> },
               ],
             },
-            {
-              path: '*',
-              element: <NotFoundPage />,
-            },
+            { path: PATH.LOCATION, element: <LocationPage /> },
           ],
         },
         {

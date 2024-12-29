@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+
 import styled from '@emotion/styled';
 import TinderCard from 'react-tinder-card';
+
 import { getRandomPlace, getPlaceDetails, likePlaceById } from '@/api/placeAPI';
-import { useToast } from '@/components/ui/Toast';
-import SignupOverlay from '@/components/ui/SignupOverlay';
 import logo from '@/assets/images/logo.svg';
+import SignupOverlay from '@/components/ui/SignupOverlay';
+import { useToast } from '@/components/ui/Toast';
+import { useAuthStore } from '@/store/authStore';
 
 interface RandomPlace {
   id: number;
@@ -23,7 +26,8 @@ const MainPage = () => {
   const [places, setPlaces] = useState<RandomPlace[]>([]);
   const [, setCurrentPlaceDetails] = useState<PlaceDetails | null>(null);
   const [isSignupOverlayOpen, setIsSignupOverlayOpen] = useState(false);
-  const token = localStorage.getItem('token') || '';
+  const { token, isAuthenticated } = useAuthStore();
+
   const { Toast, showToast } = useToast();
 
   const fetchMorePlace = async () => {

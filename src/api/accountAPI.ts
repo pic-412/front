@@ -17,7 +17,7 @@ interface UserProfile {
 }
 export const signUp = async (userData: UserData) => {
   try {
-    const response = await axios.post('https://www.pic064.site/api/accounts/', userData);
+    const response = await axios.post('https://www.pic064.site/api/accounts', userData);
 
     // 응답 로깅
     console.log('signUp 응답:', response);

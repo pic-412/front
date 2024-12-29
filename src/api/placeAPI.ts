@@ -115,7 +115,7 @@ export const getMyPic = async (token: string): Promise<MyPicPlace[]> => {
     });
 
     // 응답 데이터가 배열인지 확인하고 처리
-    const data = response.data;
+    const { data } = response;
     return Array.isArray(data) ? data : [data];
   } catch (error) {
     console.error('좋아요한 장소 목록을 가져오는 중 오류 발생:', error);

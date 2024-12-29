@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
+
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 import TinderCard from 'react-tinder-card';
+
 import { getMyPic, unlikePlaceById, getPlaceDetails } from '@/api/placeAPI';
+import Button from '@/components/ui/Button';
 import LocationCard from '@/components/ui/LocationCard';
 import { ConfirmModal } from '@/components/ui/Modal';
 import MypicCoachMark from '@/components/ui/MypicCoachMark';
 import { useToast } from '@/components/ui/Toast';
-import Button from '@/components/ui/Button';
+import { useAuthStore } from '@/store/authStore';
 import theme from '@/styles/theme';
-import { useNavigate } from 'react-router-dom';
 
 interface LikedPlace {
   id: number;
@@ -27,7 +30,7 @@ const MyPicPage = () => {
   const [currentPlace, setCurrentPlace] = useState<LikedPlace | null>(null);
   const [showCoachMark, setShowCoachMark] = useState(false);
   const { showToast, Toast } = useToast();
-  const token = localStorage.getItem('token') || '';
+  const { token, isAuthenticated } = useAuthStore();
 
   // 터치 및 클릭 상태 관리를 위한 ref와 상태
   const touchStartX = useRef(0);

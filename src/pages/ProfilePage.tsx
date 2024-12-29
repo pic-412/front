@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
+
 import { getProfile } from '@/api/accountAPI';
 import Button from '@/components/ui/Button';
-import theme from '@/styles/theme';
 import Separator from '@/components/ui/Separator';
+import { useAuthStore } from '@/store/authStore';
+import theme from '@/styles/theme';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token') || '';
+  const { token, isAuthenticated } = useAuthStore();
 
   const [userInfo, setUserInfo] = useState({
     email: '',
@@ -17,8 +20,10 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const data = await getProfile(token);
-      setUserInfo(data);
+      if (token) {
+        const data = await getProfile(token);
+        setUserInfo(data);
+      }
     };
     fetchProfile();
   }, [token]);
@@ -28,7 +33,8 @@ const ProfilePage = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    const {logout} = useAuthStore.getState();
+    logout();
     navigate('/');
   };
 

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+
 import logo from '@/assets/images/logo.svg';
 import theme from '@/styles/theme';
 
@@ -14,7 +15,7 @@ const SplashScreenWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  animation: fadeOut 5s 1s forwards;
+  animation: fadeOut 1s 0s forwards;
 
   @keyframes fadeOut {
     0% {
@@ -38,7 +39,7 @@ const Text = styled.p`
   color: ${theme.colors.primary};
 `;
 
-const SplashScreen = () => {
+const SplashScreen = () => 
   // const hasVisitedBefore =
   //   typeof window !== 'undefined' ? sessionStorage.getItem('hasVisited') : null;
 
@@ -47,12 +48,12 @@ const SplashScreen = () => {
   // }
   // if (hasVisitedBefore) return null;
 
-  return (
+   (
     <SplashScreenWrapper>
       <Logo src={logo} alt="PIG!" />
       <Text>사진으로부터 시작되는 제주도 여행</Text>
     </SplashScreenWrapper>
-  );
-};
+  )
+;
 
 export default SplashScreen;

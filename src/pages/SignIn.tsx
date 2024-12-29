@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
+
 import styled from '@emotion/styled';
-import Input from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
-import Separator from '@/components/ui/Separator';
-import logo from '@/assets/images/logo.svg';
-import { signIn } from '@/api/accountAPI';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import PasswordInput from '@/components/ui/ShowPassword';
-import theme from '@/styles/theme';
-import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import checkboxIcon from '@/assets/images/icons/checkbox.svg?raw';
 import checkedIcon from '@/assets/images/icons/checkbox_clicked.svg?raw';
+import logo from '@/assets/images/logo.svg';
+import Button from '@/components/ui/Button';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
+import Input from '@/components/ui/Input';
+import Separator from '@/components/ui/Separator';
+import PasswordInput from '@/components/ui/ShowPassword';
 import { useToast } from '@/components/ui/Toast';
+import { useAuthStore } from '@/store/authStore';
+import theme from '@/styles/theme';
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -24,38 +25,19 @@ const SignInPage = () => {
   const [isRememberMe, setIsRememberMe] = useState(false);
   const location = useLocation();
   const { Toast, showToast, hideToast } = useToast();
+  const login = useAuthStore((state) => state.login);
+
   const handleSignIn = async () => {
     if (!email || !password) {
       setIsError(true);
       setErrorMessage('이메일과 비밀번호를 모두 입력해주세요.');
       return;
     }
+
     try {
-      const response = await signIn({
-        email,
-        password,
-      });
-      const token = response.access;
-      if (token) {
-        localStorage.setItem('token', token);
-
-        // const { access: accessToken, refresh: refreshToken } = response;
-
-        // if (accessToken && refreshToken) {
-        //   localStorage.setItem('accessToken', accessToken);
-        //   localStorage.setItem('refreshToken', refreshToken);
-        //   if (isRememberMe) {
-        //     localStorage.setItem('rememberedEmail', email);
-        //   } else {
-        //     localStorage.removeItem('rememberedEmail');
-        //   }
-
-        navigate('/');
-      } else {
-        setIsError(true);
-        setErrorMessage('로그인 중 문제가 발생했습니다.');
-      }
-    } catch {
+      await login(email, password);
+      navigate('/');
+    } catch (error) {
       setIsError(true);
       setErrorMessage('이메일 또는 비밀번호를 다시 확인해주세요.');
     }
@@ -103,7 +85,7 @@ const SignInPage = () => {
           placeholder="이메일주소"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          isError={isError}
+          $isError={isError}
         />
         <Separator size="sm" />
         <PasswordInput
@@ -147,11 +129,11 @@ const ContentWrapper = styled.div`
   max-width: 400px;
   padding: 0 20px;
 `;
-const InputEmail = styled(Input)`
+const InputEmail = styled(Input)<{ $isError?: boolean }>`
   width: 100%;
   padding: 12px;
   border-radius: 4px;
-  border: 1px solid ${(props) => (props.isError ? 'red' : '#ccc')};
+  border: 1px solid ${(props) => (props.$isError ? 'red' : '#ccc')};
   margin-bottom: 10px;
 `;
 const Logo = styled.img`

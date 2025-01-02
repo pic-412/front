@@ -12,6 +12,8 @@ interface PlaceDetails {
   time: string;
   imageUrl: string;
   naverUrl: string;
+  latitude: number;
+  longitude: number;
 }
 
 interface PlaceImage {
@@ -26,6 +28,8 @@ interface MyPicPlace {
   time: string;
   imageUrl: string;
   naverUrl: string;
+  latitude: number;
+  longitude: number;
 }
 
 // 랜덤 장소 가져오기
@@ -104,7 +108,6 @@ export const getPlaceImages = async (token: string): Promise<PlaceImage[]> => {
   }
 };
 
-// 좋아요한 장소 목록 가져오기
 export const getMyPic = async (token: string): Promise<MyPicPlace[]> => {
   try {
     const response = await axios.get('https://www.pic064.site/api/places/places/pic', {
@@ -114,7 +117,6 @@ export const getMyPic = async (token: string): Promise<MyPicPlace[]> => {
       },
     });
 
-    // 응답 데이터가 배열인지 확인하고 처리
     const { data } = response;
     return Array.isArray(data) ? data : [data];
   } catch (error) {

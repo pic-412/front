@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
 import styled from '@emotion/styled';
+
 import Button from '@/components/ui/Button';
 
 interface LocationCardProps {
@@ -8,14 +10,59 @@ interface LocationCardProps {
   time: string;
   imageUrl: string;
   naverUrl: string;
+  latitude: number;
+  longitude: number;
   onClose: () => void;
 }
 
-const LocationCard: React.FC<LocationCardProps> = ({ name, address, time, naverUrl, onClose }) => {
+const LocationCard: React.FC<LocationCardProps> = ({
+  name,
+  address,
+  time,
+  naverUrl,
+  latitude,
+  longitude,
+  imageUrl,
+  onClose,
+}) => {
   const handleMapClick = () => {
-    console.log(naverUrl);
     window.open(naverUrl, '_blank');
   };
+  const mapElement = useRef(null);
+  const [isNaverLoaded, setIsNaverLoaded] = useState(false);
+  useEffect(() => {
+    const checkNaverMaps = () => {
+      if (window.naver && window.naver.maps) {
+        setIsNaverLoaded(true);
+      } else {
+        setTimeout(checkNaverMaps, 500);
+      }
+    };
+
+    checkNaverMaps();
+  }, []);
+
+  useEffect(() => {
+    if (!mapElement.current || !isNaverLoaded) return;
+
+    try {
+      const location = new window.naver.maps.LatLng(latitude, longitude);
+      const mapOptions = {
+        center: location,
+        zoom: 15,
+        zoomControl: true,
+      };
+
+      const map = new window.naver.maps.Map(mapElement.current, mapOptions);
+
+      new window.naver.maps.Marker({
+        position: location,
+        map,
+      });
+    } catch (error) {
+      console.error('Map initialization error:', error);
+    }
+  }, [latitude, longitude, isNaverLoaded]);
 
   return (
     <CardContainer>
@@ -24,23 +71,19 @@ const LocationCard: React.FC<LocationCardProps> = ({ name, address, time, naverU
       </CardHeader>
       <CardContent>
         <ContentInner>
-          {address && (
-            <InfoRow>
-              <InfoLabel>주소</InfoLabel>
-              <InfoContentWrapper>
-                <InfoText>{address}</InfoText>
-                <MapButton variant="white" onClick={handleMapClick}>
-                  지도보기
-                </MapButton>
-              </InfoContentWrapper>
-            </InfoRow>
-          )}
           {time && (
             <InfoRow>
               <InfoLabel>운영시간</InfoLabel>
               <InfoText>{time}</InfoText>
             </InfoRow>
           )}
+          {address && (
+            <InfoRow>
+              <InfoLabel>주소</InfoLabel>
+              <InfoText>{address}</InfoText>
+            </InfoRow>
+          )}
+          <MapContainer onClick={handleMapClick} ref={mapElement} />
           <CloseButton size="sm" onClick={onClose}>
             닫기
           </CloseButton>
@@ -67,6 +110,12 @@ const CardHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   min-height: 52px;
+`;
+
+const MapContainer = styled.div`
+  width: calc(100% - 16px);
+  height: 200px;
+  margin: 8px;
 `;
 
 const CardTitle = styled.h3`

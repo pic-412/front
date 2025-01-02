@@ -20,6 +20,8 @@ interface LikedPlace {
   time: string;
   imageUrl: string;
   naverUrl: string;
+  latitude: number;
+  longitude: number;
 }
 
 const MyPicPage = () => {
@@ -209,6 +211,8 @@ const MyPicPage = () => {
               time={currentPlace.time}
               imageUrl={currentPlace.imageUrl}
               naverUrl={currentPlace.naverUrl}
+              latitude={currentPlace.latitude}
+              longitude={currentPlace.longitude}
               onClose={() => setCurrentPlace(null)}
             />
           </DetailsWrapper>

@@ -37,4 +37,4 @@ jobs:
             ${{ secrets.NCP_PASSWORD }}
             sudo docker stop pic064 || true
             sudo docker rm pic064 || true
-            sudo docker run -d --name pic064 -p 8080:80 sjgaru/pic064:latest
+            sudo docker run -d --name pic064 -p 8080:8080 sjgaru/pic064:latest

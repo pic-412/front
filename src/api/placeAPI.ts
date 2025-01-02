@@ -116,7 +116,7 @@ export const getMyPic = async (token: string): Promise<MyPicPlace[]> => {
         accept: '*/*',
       },
     });
-
+    
     const { data } = response;
     return Array.isArray(data) ? data : [data];
   } catch (error) {
